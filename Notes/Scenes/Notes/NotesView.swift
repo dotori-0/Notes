@@ -26,6 +26,8 @@ class NotesView: BaseView {
     }()
     
     
+    
+    
     // MARK: - Functions
     
     override init(frame: CGRect) {

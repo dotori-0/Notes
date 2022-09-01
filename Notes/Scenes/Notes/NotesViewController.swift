@@ -54,8 +54,23 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "고정된 메모" : "메모"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let headerTitleLabel: UILabel = {
+            let label = UILabel()
+            label.text = section == 0 ? "고정된 메모" : "메모"
+            label.font = .boldSystemFont(ofSize: 22)
+            return label
+        }()
+        
+        headerView.addSubview(headerTitleLabel)
+        
+        headerTitleLabel.snp.remakeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
