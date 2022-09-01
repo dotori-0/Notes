@@ -8,7 +8,18 @@
 import UIKit
 
 class NotesView: BaseView {
-
+    
+    // MARK: - Properties
+    
+    let searchController: UISearchController = {
+        let controller = UISearchController()
+        controller.searchBar.placeholder = "검색"
+        controller.searchBar.setValue("취소", forKey: "cancelButtonText")
+        return controller
+    }()
+    
+    
+    // MARK: - Functions
 
     override init(frame: CGRect) {
         super.init(frame: frame)

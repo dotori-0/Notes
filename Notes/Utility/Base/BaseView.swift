@@ -8,6 +8,8 @@
 import UIKit
 
 class BaseView: UIView {
+    
+    // MARK: - Functions
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,8 +26,6 @@ class BaseView: UIView {
         backgroundColor = .systemBackground
     }
     
-    func setConstraints() {
-        
-    }
+    func setConstraints() { }
     
 }

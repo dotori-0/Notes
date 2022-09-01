@@ -8,7 +8,13 @@
 import UIKit
 
 class NotesViewController: BaseViewController {
+    
+    // MARK: - Properties
+    
     let notesView = NotesView()
+    
+    
+    // MARK: - Functions
     
     override func loadView() {
         view = notesView
@@ -17,9 +23,8 @@ class NotesViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
-    
+
 
     override func setUI() {
         print(#function)
@@ -31,6 +36,12 @@ class NotesViewController: BaseViewController {
             return
         }
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.searchController = notesView.searchController
+        
+    }
+    
+    override func setConstraints() {
+        
     }
 
 }

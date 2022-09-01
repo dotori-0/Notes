@@ -7,7 +7,11 @@
 
 import UIKit
 
+import SnapKit
+
 class BaseViewController: UIViewController {
+    
+    // MARK: - Functions
 
     override func viewDidLoad() {
         super.viewDidLoad()
