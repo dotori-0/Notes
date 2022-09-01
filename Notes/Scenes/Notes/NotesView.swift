@@ -12,7 +12,7 @@ class NotesView: BaseView {
     // MARK: - Properties
     
     let searchController: UISearchController = {
-        let controller = UISearchController()
+        let controller = UISearchController(searchResultsController: nil)
         controller.searchBar.placeholder = "검색"
         controller.searchBar.setValue("취소", forKey: "cancelButtonText")
         controller.searchBar.becomeFirstResponder()

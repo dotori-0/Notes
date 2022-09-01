@@ -39,13 +39,18 @@ class NotesViewController: BaseViewController {
         }
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = notesView.searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        navigationItem.hidesSearchBarWhenScrolling = true
     }
     
     override func setConstraints() {
         
     }
-
 }
 
 
@@ -94,5 +99,15 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    
+}
+
+
+extension NotesViewController: UISearchBarDelegate {
+    
+}
+
+
+extension NotesViewController: UISearchControllerDelegate {
     
 }
