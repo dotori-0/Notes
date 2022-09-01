@@ -12,6 +12,22 @@ class NotesViewController: BaseViewController {
     // MARK: - Properties
     
     let notesView = NotesView()
+    var allNotes = [Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
+    var filteredNotes: [Notes] = []
+    
+    var isSearchBarEmpty: Bool {
+        return notesView.searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    var isFiltering: Bool {
+        return notesView.searchController.isActive && !isSearchBarEmpty
+    }
     
     
     // MARK: - Functions
@@ -25,6 +41,10 @@ class NotesViewController: BaseViewController {
 
         notesView.tableView.dataSource = self
         notesView.tableView.delegate = self
+        
+//        view.addSubview(notesView.toolBar)
+//        notesView.toolBar.delegate = self
+        notesView.searchController.searchResultsUpdater = self
     }
 
 
@@ -51,12 +71,20 @@ class NotesViewController: BaseViewController {
     override func setConstraints() {
         
     }
+    
+    func filterNotesForSearchText(searchText: String) {
+        filteredNotes = allNotes.filter({ note in
+            return note.title.contains(searchText) || note.contents.contains(searchText)
+        })
+        
+        notesView.tableView.reloadData()
+    }
 }
 
 
 extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return isFiltering ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -79,11 +107,16 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        50
+        print("🐹 \(UIScreen.main.bounds.height)")  // 🐹 896.0
+        return 50  // 약 0.18배
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : 5
+        if !isFiltering {
+            return section == 0 ? 2 : 5
+        } else {
+            return filteredNotes.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -92,14 +125,22 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         
-        cell.titleLabel.text = "타이틀\(indexPath.row)"
-        cell.dateAndTimeLabel.text = "2022.09.01"
-        cell.contentsLabel.text = "메모 내용"
+//        cell.titleLabel.text = "타이틀\(indexPath.row)"
+//        cell.dateAndTimeLabel.text = "2022.09.01"
+//        cell.contentsLabel.text = "\(Int.random(in: 1...5))"
         
+        cell.dateAndTimeLabel.text = "2022.09.01"
+        
+        if isFiltering {
+            cell.titleLabel.text = filteredNotes[indexPath.row].title
+            cell.contentsLabel.text = filteredNotes[indexPath.row].contents
+        } else {
+            cell.titleLabel.text = allNotes[indexPath.row].title
+            cell.contentsLabel.text = allNotes[indexPath.row].contents
+        }
+
         return cell
     }
-    
-    
 }
 
 
@@ -107,7 +148,24 @@ extension NotesViewController: UISearchBarDelegate {
     
 }
 
+extension NotesViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else {
+            print("no text")
+            return
+        }
+        filterNotesForSearchText(searchText: text)
+    }
+}
+
 
 extension NotesViewController: UISearchControllerDelegate {
     
 }
+
+
+//extension NotesViewController: UIToolbarDelegate {
+//    func position(for bar: UIBarPositioning) -> UIBarPosition {
+//        return .bottom
+//    }
+//}
