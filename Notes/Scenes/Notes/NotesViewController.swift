@@ -23,6 +23,8 @@ class NotesViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        notesView.tableView.dataSource = self
+        notesView.tableView.delegate = self
     }
 
 
@@ -44,4 +46,38 @@ class NotesViewController: BaseViewController {
         
     }
 
+}
+
+
+extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "고정된 메모" : "메모"
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        50
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? 2 : 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NotesTableViewCell.reuseIdentifier) as? NotesTableViewCell else {
+            print("Cannot find NotesTableViewCell")
+            return UITableViewCell()
+        }
+        
+        cell.titleLabel.text = "타이틀\(indexPath.row)"
+        cell.dateAndTimeLabel.text = "2022.09.01"
+        cell.contentsLabel.text = "메모 내용"
+        
+        return cell
+    }
+    
+    
 }
