@@ -91,10 +91,16 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         let headerView = UIView()
         let headerTitleLabel: UILabel = {
             let label = UILabel()
-            label.text = section == 0 ? "고정된 메모" : "메모"
+//            label.text = section == 0 ? "고정된 메모" : "메모"
             label.font = .boldSystemFont(ofSize: 22)
             return label
         }()
+        
+        if isFiltering {
+            headerTitleLabel.text = "\(filteredNotes.count) 개 찾음"
+        } else {
+            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
+        }
         
         headerView.addSubview(headerTitleLabel)
         
@@ -113,7 +119,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isFiltering {
-            return section == 0 ? 2 : 5
+            return section == 0 ? 2 : allNotes.count
         } else {
             return filteredNotes.count
         }
