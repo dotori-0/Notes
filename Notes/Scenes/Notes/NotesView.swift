@@ -52,7 +52,7 @@ class NotesView: BaseView {
         super.setUI()
         
         addSubview(tableView)
-        addSubview(toolbar)
+//        addSubview(toolbar)
     }
     
     override func setConstraints() {
@@ -60,10 +60,10 @@ class NotesView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        toolbar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
-//            make.height.equalTo(44)
-        }
-        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
+//        toolbar.snp.makeConstraints { make in
+//            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
+////            make.height.equalTo(44)
+//        }
+//        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
     }
 }

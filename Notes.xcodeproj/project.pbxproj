@@ -23,6 +23,9 @@
 		0AE0952828C0C8A100752327 /* NotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */; };
 		0AE0952A28C11A4700752327 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952928C11A4700752327 /* Notes.swift */; };
 		0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */; };
+		0AE0953428C2171600752327 /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953328C2171600752327 /* WriteViewController.swift */; };
+		0AE0953628C2174200752327 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953528C2174200752327 /* WriteView.swift */; };
+		0AE0953828C21A5500752327 /* Transition+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953728C21A5500752327 /* Transition+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +46,9 @@
 		0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewCell.swift; sourceTree = "<group>"; };
 		0AE0952928C11A4700752327 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttributedString+Extension.swift"; sourceTree = "<group>"; };
+		0AE0953328C2171600752327 /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
+		0AE0953528C2174200752327 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
+		0AE0953728C21A5500752327 /* Transition+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transition+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,7 @@
 			children = (
 				0AE0951628C0953D00752327 /* Utility */,
 				0AE0951228C094D300752327 /* Scenes */,
+				0AE0953228C2170500752327 /* Write */,
 				0AE094F428BFCCFB00752327 /* AppDelegate.swift */,
 				0AE094F628BFCCFB00752327 /* SceneDelegate.swift */,
 				0AE094F828BFCCFB00752327 /* ViewController.swift */,
@@ -140,8 +147,18 @@
 			isa = PBXGroup;
 			children = (
 				0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */,
+				0AE0953728C21A5500752327 /* Transition+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0AE0953228C2170500752327 /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				0AE0953328C2171600752327 /* WriteViewController.swift */,
+				0AE0953528C2174200752327 /* WriteView.swift */,
+			);
+			path = Write;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,8 +243,11 @@
 				0AE0951E28C0960100752327 /* NotesView.swift in Sources */,
 				0AE0951A28C0957700752327 /* BaseViewController.swift in Sources */,
 				0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */,
+				0AE0953428C2171600752327 /* WriteViewController.swift in Sources */,
+				0AE0953628C2174200752327 /* WriteView.swift in Sources */,
 				0AE0952A28C11A4700752327 /* Notes.swift in Sources */,
 				0AE0951528C0953700752327 /* NotesViewController.swift in Sources */,
+				0AE0953828C21A5500752327 /* Transition+Extension.swift in Sources */,
 				0AE094F928BFCCFB00752327 /* ViewController.swift in Sources */,
 				0AE0951C28C095B800752327 /* BaseView.swift in Sources */,
 				0AE0952828C0C8A100752327 /* NotesTableViewCell.swift in Sources */,
