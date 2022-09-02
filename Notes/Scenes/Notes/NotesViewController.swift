@@ -23,7 +23,12 @@ class NotesViewController: BaseViewController {
                     NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
                     NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
                     NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
-    var allNotes: Results<Note>!
+    var allNotes: Results<Note>! {
+        didSet {
+            print("Notes Changed")
+            notesView.tableView.reloadData()
+        }
+    }
     var filteredNotes: [NotesModel] = []
     
     var isSearchBarEmpty: Bool {
@@ -151,7 +156,8 @@ class NotesViewController: BaseViewController {
 
 extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return isFiltering ? 1 : 2
+//        return isFiltering ? 1 : 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -165,7 +171,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         if isFiltering {
             headerTitleLabel.text = "\(filteredNotes.count) 개 찾음"
         } else {
-            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
+//            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
+            headerTitleLabel.text = "메모"
         }
         
         headerView.addSubview(headerTitleLabel)
@@ -184,10 +191,12 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !isFiltering {
-            return section == 0 ? 2 : allDummyNotes.count
-        } else {
+        if isFiltering {
             return filteredNotes.count
+        } else {
+//            return section == 0 ? 2 : allDummyNotes.count
+//            return section == 0 ? 2 : allNotes.count
+            return allNotes.count
         }
     }
     
@@ -197,39 +206,30 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         
-//        cell.titleLabel.text = "타이틀\(indexPath.row)"
-//        cell.dateAndTimeLabel.text = "2022.09.01"
-//        cell.contentsLabel.text = "\(Int.random(in: 1...5))"
-        
         cell.dateAndTimeLabel.text = "2022.09.01"
            
         if isFiltering {
-//            cell.titleLabel.text = filteredNotes[indexPath.row].title
-//            cell.contentsLabel.text = filteredNotes[indexPath.row].contents
-            
-//            var tintColor: UIColor
-//            if #available(iOS 15.0, *) {  // 'tintColor' is only available in iOS 15.0 or newer
-//                tintColor = .tintColor
-//            } else {
-//                // Fallback on earlier versions
-//                tintColor = UIColor.systemOrange
-//            }
-            
             guard !filteredNotes.isEmpty else { return UITableViewCell() }
             
             let filteredNoteTitle = filteredNotes[indexPath.row].title
-//            let attributedTitle = NSMutableAttributedString(string: filteredNoteTitle)
-//            attributedTitle.addAttribute(.foregroundColor, value: tintColor, range: (filteredNoteTitle as NSString).range(of: searchText))
-            
             let filteredNoteContents = filteredNotes[indexPath.row].contents
-//            let attributedContents = NSMutableAttributedString(string: filteredNoteContents)
-//            attributedContents.addAttribute(.foregroundColor, value: tintColor, range: (filteredNoteContents as NSString).range(of: searchText))
             
             cell.titleLabel.attributedText = filteredNoteTitle.addAttribute(to: searchText)
             cell.contentsLabel.attributedText = filteredNoteContents.addAttribute(to: searchText)
         } else {
-            cell.titleLabel.text = allDummyNotes[indexPath.row].title
-            cell.contentsLabel.text = allDummyNotes[indexPath.row].contents
+            print("🐤")
+            guard !allNotes.isEmpty else { return UITableViewCell() }
+//            cell.titleLabel.text = allDummyNotes[indexPath.row].title
+//            cell.contentsLabel.text = allDummyNotes[indexPath.row].contents
+            print("🐣 allNotes.count: \(allNotes.count)")
+            print("🐥 allNotes: \(allNotes)")
+            
+            let note = allNotes[indexPath.row]
+
+            
+            cell.titleLabel.text = note.title
+            cell.dateAndTimeLabel.text = "\(note.editDate)"
+            cell.contentsLabel.text = note.contents
         }
 
         return cell
