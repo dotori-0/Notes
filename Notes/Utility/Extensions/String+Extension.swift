@@ -22,4 +22,8 @@ extension String {
         
         return attributedString
     }
+    
+    func trimAllNewLines() -> String {
+        return self.trimmingCharacters(in: .newlines)
+    }
 }

@@ -257,7 +257,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.titleLabel.text = note.title
             cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
-            cell.contentsLabel.text = note.contents
+            cell.contentsLabel.text = note.contents?.trimAllNewLines()
         }
 
         return cell
