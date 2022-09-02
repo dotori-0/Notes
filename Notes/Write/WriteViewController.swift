@@ -8,7 +8,15 @@
 import UIKit
 
 class WriteViewController: BaseViewController {
+    
+    // MARK: - Properties
+    
     let writeView = WriteView()
+    
+    let repository = NotesRepository()
+    
+    
+    // MARK: - Functions
     
     override func loadView() {
         view = writeView
@@ -30,10 +38,43 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func shareButtonClicked() {
-
+        
     }
     
     @objc func doneButtonClicked() {
+        saveNoteToRealm()
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func saveNoteToRealm() {
+        guard let text = writeView.textView.text else {
+            print("Cannot find text in Text View")
+            return
+        }
         
+        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
+//        print(titleAndContentsArray)
+        guard let title = titleAndContentsArray.first else {
+            print("Cannot find title")
+            return
+        }
+
+//        print("title: \(title)")
+        print("text.hasPrefix(title): \(text.hasPrefix(title))")
+        
+        let contentsSubsequence = text.dropFirst(title.count)
+        let contents = String(contentsSubsequence)  // Non-optional
+
+//        guard let contents = String(contentsSubsequence) else {
+//            print("Cannot change contentsSubsequence to String")
+//            return
+//        }
+//        print(contents)
+//        print(type(of: contentsSubsequence))
+//        print(type(of: contents))
+        
+        let note = Note(title: title, contents: contents)
+        print(note)
+        repository.writeNote(note)
     }
 }

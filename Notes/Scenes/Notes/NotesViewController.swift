@@ -6,20 +6,25 @@
 //
 
 import UIKit
+import RealmSwift
 
 class NotesViewController: BaseViewController {
     
     // MARK: - Properties
     
     let notesView = NotesView()
-    var allNotes = [Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    Notes(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
-    var filteredNotes: [Notes] = []
+    
+    let repository = NotesRepository()
+    
+    var allDummyNotes = [NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
+    var allNotes: Results<Note>!
+    var filteredNotes: [NotesModel] = []
     
     var isSearchBarEmpty: Bool {
         return notesView.searchController.searchBar.text?.isEmpty ?? true
@@ -51,8 +56,6 @@ class NotesViewController: BaseViewController {
             toolbar.standardAppearance = appearance
         }
         
-        
-        
         return toolbar
     }()
     
@@ -79,6 +82,7 @@ class NotesViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.prefersLargeTitles = true
+        fetchRealm()
     }
     
     
@@ -128,10 +132,15 @@ class NotesViewController: BaseViewController {
     @objc func writeButtonClicked() {
         transition(to: WriteViewController(), transitionStyle: .push)
     }
+    
+    
+    func fetchRealm() {
+        allNotes = repository.fetch()
+    }
 
     
     func filterNotesForSearchText(searchText: String) {
-        filteredNotes = allNotes.filter({ note in
+        filteredNotes = allDummyNotes.filter({ note in
             return note.title.contains(searchText) || note.contents.contains(searchText)
         })
         
@@ -176,7 +185,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isFiltering {
-            return section == 0 ? 2 : allNotes.count
+            return section == 0 ? 2 : allDummyNotes.count
         } else {
             return filteredNotes.count
         }
@@ -219,8 +228,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             cell.titleLabel.attributedText = filteredNoteTitle.addAttribute(to: searchText)
             cell.contentsLabel.attributedText = filteredNoteContents.addAttribute(to: searchText)
         } else {
-            cell.titleLabel.text = allNotes[indexPath.row].title
-            cell.contentsLabel.text = allNotes[indexPath.row].contents
+            cell.titleLabel.text = allDummyNotes[indexPath.row].title
+            cell.contentsLabel.text = allDummyNotes[indexPath.row].contents
         }
 
         return cell

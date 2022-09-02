@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Notes {
+struct NotesModel {
     var title: String
     var contents: String
 }
