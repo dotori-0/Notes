@@ -207,6 +207,11 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.dateAndTimeLabel.text = "2022.09.01"
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        let calendar = Calendar.current
+
            
         if isFiltering {
             guard !filteredNotes.isEmpty else { return UITableViewCell() }
@@ -222,13 +227,36 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
 //            cell.titleLabel.text = allDummyNotes[indexPath.row].title
 //            cell.contentsLabel.text = allDummyNotes[indexPath.row].contents
             print("🐣 allNotes.count: \(allNotes.count)")
-            print("🐥 allNotes: \(allNotes)")
+//            print("🐥 allNotes: \(allNotes)")
             
             let note = allNotes[indexPath.row]
-
+            
+            let components = calendar.dateComponents([.weekOfYear], from: Date())
+            print("components: \(components)")
+            
+            let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
+            let weekOfEditDate = editDateComponent.weekOfYear
+            
+            let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
+            let weekOfToday = currentDateComponent.weekOfYear
+        
+            
+            if calendar.isDateInToday(note.editDate) {
+                formatter.dateFormat = "a hh:mm"
+            } else if weekOfEditDate == weekOfToday {
+                formatter.dateFormat = "EEEE"
+            } else {
+                formatter.dateFormat = "yyyy. MM. dd a hh:mm"
+            }
+            
+            
+            print(note.contents)
+            
+            let contentsNewLinesRemoved = note.contents?.trimmingCharacters(in: .newlines)
+            print("✂️ \(contentsNewLinesRemoved)")
             
             cell.titleLabel.text = note.title
-            cell.dateAndTimeLabel.text = "\(note.editDate)"
+            cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
             cell.contentsLabel.text = note.contents
         }
 

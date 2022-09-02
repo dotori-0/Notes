@@ -22,7 +22,7 @@
 		0AE0952628C0C82300752327 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952528C0C82300752327 /* ReusableView.swift */; };
 		0AE0952828C0C8A100752327 /* NotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */; };
 		0AE0952A28C11A4700752327 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952928C11A4700752327 /* NotesModel.swift */; };
-		0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */; };
+		0AE0953128C20A8B00752327 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953028C20A8B00752327 /* String+Extension.swift */; };
 		0AE0953428C2171600752327 /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953328C2171600752327 /* WriteViewController.swift */; };
 		0AE0953628C2174200752327 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953528C2174200752327 /* WriteView.swift */; };
 		0AE0953828C21A5500752327 /* Transition+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953728C21A5500752327 /* Transition+Extension.swift */; };
@@ -49,7 +49,7 @@
 		0AE0952528C0C82300752327 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewCell.swift; sourceTree = "<group>"; };
 		0AE0952928C11A4700752327 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
-		0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttributedString+Extension.swift"; sourceTree = "<group>"; };
+		0AE0953028C20A8B00752327 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		0AE0953328C2171600752327 /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
 		0AE0953528C2174200752327 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
 		0AE0953728C21A5500752327 /* Transition+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transition+Extension.swift"; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 		0AE0952F28C20A4800752327 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */,
+				0AE0953028C20A8B00752327 /* String+Extension.swift */,
 				0AE0953728C21A5500752327 /* Transition+Extension.swift */,
 			);
 			path = Extensions;
@@ -263,7 +263,7 @@
 				0AE0952328C0C7C400752327 /* BaseTableViewCell.swift in Sources */,
 				0AE0951E28C0960100752327 /* NotesView.swift in Sources */,
 				0AE0951A28C0957700752327 /* BaseViewController.swift in Sources */,
-				0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */,
+				0AE0953128C20A8B00752327 /* String+Extension.swift in Sources */,
 				0AE0953428C2171600752327 /* WriteViewController.swift in Sources */,
 				0AE0953628C2174200752327 /* WriteView.swift in Sources */,
 				0AE0952A28C11A4700752327 /* NotesModel.swift in Sources */,
