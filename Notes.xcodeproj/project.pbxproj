@@ -22,6 +22,7 @@
 		0AE0952628C0C82300752327 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952528C0C82300752327 /* ReusableView.swift */; };
 		0AE0952828C0C8A100752327 /* NotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */; };
 		0AE0952A28C11A4700752327 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0952928C11A4700752327 /* Notes.swift */; };
+		0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		0AE0952528C0C82300752327 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		0AE0952728C0C8A100752327 /* NotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewCell.swift; sourceTree = "<group>"; };
 		0AE0952928C11A4700752327 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
+		0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttributedString+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 		0AE0951628C0953D00752327 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				0AE0952F28C20A4800752327 /* Extensions */,
 				0AE0952428C0C81800752327 /* Protocols */,
 				0AE0951828C0956D00752327 /* Base */,
 			);
@@ -131,6 +134,14 @@
 				0AE0952528C0C82300752327 /* ReusableView.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		0AE0952F28C20A4800752327 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0AE0953028C20A8B00752327 /* AttributedString+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +225,7 @@
 				0AE0952328C0C7C400752327 /* BaseTableViewCell.swift in Sources */,
 				0AE0951E28C0960100752327 /* NotesView.swift in Sources */,
 				0AE0951A28C0957700752327 /* BaseViewController.swift in Sources */,
+				0AE0953128C20A8B00752327 /* AttributedString+Extension.swift in Sources */,
 				0AE0952A28C11A4700752327 /* Notes.swift in Sources */,
 				0AE0951528C0953700752327 /* NotesViewController.swift in Sources */,
 				0AE094F928BFCCFB00752327 /* ViewController.swift in Sources */,

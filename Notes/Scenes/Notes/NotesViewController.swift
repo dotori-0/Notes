@@ -29,6 +29,8 @@ class NotesViewController: BaseViewController {
         return notesView.searchController.isActive && !isSearchBarEmpty
     }
     
+    var searchText = ""
+    
     
     // MARK: - Functions
     
@@ -136,10 +138,31 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
 //        cell.contentsLabel.text = "\(Int.random(in: 1...5))"
         
         cell.dateAndTimeLabel.text = "2022.09.01"
-        
+           
         if isFiltering {
-            cell.titleLabel.text = filteredNotes[indexPath.row].title
-            cell.contentsLabel.text = filteredNotes[indexPath.row].contents
+//            cell.titleLabel.text = filteredNotes[indexPath.row].title
+//            cell.contentsLabel.text = filteredNotes[indexPath.row].contents
+            
+//            var tintColor: UIColor
+//            if #available(iOS 15.0, *) {  // 'tintColor' is only available in iOS 15.0 or newer
+//                tintColor = .tintColor
+//            } else {
+//                // Fallback on earlier versions
+//                tintColor = UIColor.systemOrange
+//            }
+            
+            guard !filteredNotes.isEmpty else { return UITableViewCell() }
+            
+            let filteredNoteTitle = filteredNotes[indexPath.row].title
+//            let attributedTitle = NSMutableAttributedString(string: filteredNoteTitle)
+//            attributedTitle.addAttribute(.foregroundColor, value: tintColor, range: (filteredNoteTitle as NSString).range(of: searchText))
+            
+            let filteredNoteContents = filteredNotes[indexPath.row].contents
+//            let attributedContents = NSMutableAttributedString(string: filteredNoteContents)
+//            attributedContents.addAttribute(.foregroundColor, value: tintColor, range: (filteredNoteContents as NSString).range(of: searchText))
+            
+            cell.titleLabel.attributedText = filteredNoteTitle.addAttribute(to: searchText)
+            cell.contentsLabel.attributedText = filteredNoteContents.addAttribute(to: searchText)
         } else {
             cell.titleLabel.text = allNotes[indexPath.row].title
             cell.contentsLabel.text = allNotes[indexPath.row].contents
@@ -160,6 +183,8 @@ extension NotesViewController: UISearchResultsUpdating {
             print("no text")
             return
         }
+        
+        searchText = text
         filterNotesForSearchText(searchText: text)
     }
 }
