@@ -12,7 +12,7 @@ extension UIViewController {
         case push
     }
     
-    func transition<T: UIViewController>(to vc: T, transitionStyle: TransitionStyle) {
+    func transition<T: UIViewController>(to vc: T, transitionStyle: TransitionStyle = .push) {
         switch transitionStyle {
             case .push:
                 self.navigationController?.pushViewController(vc, animated: true)

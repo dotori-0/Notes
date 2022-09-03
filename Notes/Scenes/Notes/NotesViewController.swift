@@ -127,7 +127,7 @@ class NotesViewController: BaseViewController {
     
     override func setActions() {
         // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기
-        let handler: () -> Void = { self.transition(to: WriteViewController(), transitionStyle: .push) }
+        let handler: () -> Void = { self.transition(to: WriteViewController()) }
         notesView.writeButtonHandler = handler
         // 런타임 에러
         // Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+[Notes.NotesViewController writeButtonHandler]: unrecognized selector sent to class 0x104417008'
@@ -135,7 +135,7 @@ class NotesViewController: BaseViewController {
     
         
     @objc func writeButtonClicked() {
-        transition(to: WriteViewController(), transitionStyle: .push)
+        transition(to: WriteViewController())
     }
     
     
@@ -260,6 +260,14 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = WriteViewController()
+        vc.isExistingNote = true
+        vc.note = allNotes[indexPath.row]
+        
+        transition(to: vc)
     }
 }
 

@@ -12,8 +12,10 @@ class WriteViewController: BaseViewController {
     // MARK: - Properties
     
     let writeView = WriteView()
-    
     let repository = NotesRepository()
+    
+    var isExistingNote = false
+    var note: Note?
     
     
     // MARK: - Functions
@@ -25,7 +27,8 @@ class WriteViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        print("selected note: \(note)")
+        if isExistingNote { showExistingNote() }
     }
     
     override func setUI() {
@@ -35,6 +38,15 @@ class WriteViewController: BaseViewController {
         let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(doneButtonClicked))
         navigationItem.rightBarButtonItems = [doneButton, shareButton]
         navigationItem.backButtonTitle = "메모"
+    }
+    
+    func showExistingNote() {
+        writeView.textView.text = note?.title
+        
+        if let contents = note?.contents {
+            writeView.textView.text += contents
+        }
+//        writeView.textView.text += note?.contents
     }
     
     @objc func shareButtonClicked() {
@@ -62,8 +74,8 @@ class WriteViewController: BaseViewController {
 //        print("title: \(title)")
         print("text.hasPrefix(title): \(text.hasPrefix(title))")
         
-        let contentsSubsequence = text.dropFirst(title.count)
-        let contents = String(contentsSubsequence)  // Non-optional
+        let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
+        let contents = String(contentsSubsequence)             // Non-optional
 
 //        guard let contents = String(contentsSubsequence) else {
 //            print("Cannot change contentsSubsequence to String")
