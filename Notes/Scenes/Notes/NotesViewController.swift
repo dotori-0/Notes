@@ -224,15 +224,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             print("🐤")
             guard !allNotes.isEmpty else { return UITableViewCell() }
-//            cell.titleLabel.text = allDummyNotes[indexPath.row].title
-//            cell.contentsLabel.text = allDummyNotes[indexPath.row].contents
-            print("🐣 allNotes.count: \(allNotes.count)")
-//            print("🐥 allNotes: \(allNotes)")
             
             let note = allNotes[indexPath.row]
-            
-            let components = calendar.dateComponents([.weekOfYear], from: Date())
-            print("components: \(components)")
             
             let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
             let weekOfEditDate = editDateComponent.weekOfYear
@@ -249,15 +242,21 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
                 formatter.dateFormat = "yyyy. MM. dd a hh:mm"
             }
             
-            
+            print(note.title)
             print(note.contents)
             
-            let contentsNewLinesRemoved = note.contents?.trimmingCharacters(in: .newlines)
+//            guard note.contents != nil else { return UITableViewCell() }
+            
+            guard let contentsNewLinesRemoved = note.contents?.trimAllNewLines() else { return UITableViewCell() }
             print("✂️ \(contentsNewLinesRemoved)")
+            
+            let contentsLabelText = contentsNewLinesRemoved.isEmpty ? "추가 텍스트 없음" : contentsNewLinesRemoved
+            // 내용으로 엔터만 쳤을 경우 note.contents가 Optional("\n\n\n\n\n\n\n")이기 때문에
             
             cell.titleLabel.text = note.title
             cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
-            cell.contentsLabel.text = note.contents?.trimAllNewLines()
+//            cell.contentsLabel.text = note.contents?.trimAllNewLines()
+            cell.contentsLabel.text = contentsLabelText
         }
 
         return cell
