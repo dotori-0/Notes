@@ -86,6 +86,7 @@ class NotesViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
         fetchRealm()
     }
@@ -96,9 +97,14 @@ class NotesViewController: BaseViewController {
         
         navigationItem.hidesSearchBarWhenScrolling = true
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+//        navigationController?.navigationBar.prefersLargeTitles = false  // prefersLargeTitles = false는 뷰 전환 후에도 Large Title이 잠시 남아 있는 문제 있음
+    }
 
 
     override func setUI() {
+        print("💙", #function)
         title = "1234개의 메모"
         
         guard navigationController != nil else {
