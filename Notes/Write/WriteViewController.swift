@@ -17,6 +17,8 @@ class WriteViewController: BaseViewController {
     var isExistingNote = false
     var note: Note?
     
+    var barButtons: [UIBarButtonItem] = []
+    
     
     // MARK: - Functions
     
@@ -26,6 +28,8 @@ class WriteViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        writeView.textView.delegate = self
 
         print("selected note: \(note)")
         if isExistingNote {
@@ -33,16 +37,26 @@ class WriteViewController: BaseViewController {
         } else {
             writeView.textView.becomeFirstResponder()
         }
+        
+        hideAndShowDoneButton(isEditing: !isExistingNote)
     }
     
     override func setUI() {
         super.setUI()
         navigationItem.largeTitleDisplayMode = .never
-        
-        let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
-        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(doneButtonClicked))
-        navigationItem.rightBarButtonItems = [doneButton, shareButton]
         navigationItem.backButtonTitle = "메모"
+    }
+    
+    func hideAndShowDoneButton(isEditing: Bool) {
+        let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
+        barButtons = [shareButton]
+        
+        if isEditing {
+            let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(doneButtonClicked))
+            barButtons.insert(doneButton, at: 0)
+        }
+
+        navigationItem.rightBarButtonItems = barButtons
     }
     
     func showExistingNote() {
@@ -70,7 +84,6 @@ class WriteViewController: BaseViewController {
         }
         
         writeView.endEditing(true)
-//        navigationController?.popViewController(animated: true)
     }
     
     func setNote() -> Note? {
@@ -135,31 +148,12 @@ class WriteViewController: BaseViewController {
     }
     
     func saveNoteToRealm() {
-//        let note = Note(title: title, contents: contents)
         guard let note = setNote() else { return }
         print(note)
         repository.writeNote(note)
     }
     
     func checkChangesAndUpdateNoteToRealm() {
-//        guard let text = writeView.textView.text else {
-//            print("Cannot find text in Text View")
-//            return
-//        }
-//
-//        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
-//
-//        guard let title = titleAndContentsArray.first else {
-//            print("Cannot find title")
-//            return
-//        }
-//
-//        print("text.hasPrefix(title): \(text.hasPrefix(title))")
-//
-//        let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
-//        let contents = String(contentsSubsequence)             // Non-optional
-        
-//        let editedNote = Note(title: title, contents: contents)
         guard let editedNote = setNote() else { return }
         print(editedNote)
         
@@ -168,5 +162,16 @@ class WriteViewController: BaseViewController {
         if originalNote.title != editedNote.title || originalNote.contents != editedNote.contents  {
             repository.updateNote(from: originalNote, to: editedNote)
         }
+    }
+}
+
+
+extension WriteViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        hideAndShowDoneButton(isEditing: true)
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        hideAndShowDoneButton(isEditing: false)
     }
 }

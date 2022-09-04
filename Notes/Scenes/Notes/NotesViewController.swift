@@ -181,19 +181,6 @@ class NotesViewController: BaseViewController {
 
     
     func findNotes(with searchText: String) {
-//        searchText.caseInsensitiveCompare(<#T##aString: StringProtocol##StringProtocol#>)
-        
-//        foundNotes = allNotes.filter({ note in
-//            let titleLowercased = note.title.lowercased()
-//
-//            if let contents = note.contents {
-//                let contentsLowercased = contents.lowercased()
-//                return titleLowercased.contains(searchText) || contentsLowercased.contains(searchText)
-//            } else {
-//                return titleLowercased.contains(searchText)
-//            }
-//        })
-        
         foundNotes = repository.findNotes(with: searchText)
         notesView.tableView.reloadData()
     }
