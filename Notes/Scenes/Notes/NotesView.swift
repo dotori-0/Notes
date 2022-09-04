@@ -26,15 +26,15 @@ class NotesView: BaseView {
         return view
     }()
     
-    @objc var writeButtonHandler: (() -> Void)?
-    
-    let toolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        let spaceBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: NotesViewController.self, action: nil)
-        let writeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: NotesViewController.self, action: #selector(getter: writeButtonHandler))
-        toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
-        return toolbar
-    }()
+//    @objc var writeButtonHandler: (() -> Void)?
+//
+//    let toolbar: UIToolbar = {
+//        let toolbar = UIToolbar()
+//        let spaceBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: NotesViewController.self, action: nil)
+//        let writeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: NotesViewController.self, action: #selector(getter: writeButtonHandler))
+//        toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
+//        return toolbar
+//    }()
     
     
     

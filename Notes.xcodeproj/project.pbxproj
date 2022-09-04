@@ -30,6 +30,7 @@
 		0AE0953E28C243DF00752327 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 0AE0953D28C243DF00752327 /* Realm */; };
 		0AE0954028C243E000752327 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0AE0953F28C243E000752327 /* RealmSwift */; };
 		0AE0954228C2462D00752327 /* NotesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954128C2462D00752327 /* NotesRepository.swift */; };
+		0AE0954528C4EE6C00752327 /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954428C4EE6B00752327 /* Alert+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		0AE0953728C21A5500752327 /* Transition+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transition+Extension.swift"; sourceTree = "<group>"; };
 		0AE0953A28C242F800752327 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		0AE0954128C2462D00752327 /* NotesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesRepository.swift; sourceTree = "<group>"; };
+		0AE0954428C4EE6B00752327 /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			children = (
 				0AE0953028C20A8B00752327 /* String+Extension.swift */,
 				0AE0953728C21A5500752327 /* Transition+Extension.swift */,
+				0AE0954428C4EE6B00752327 /* Alert+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				0AE0954228C2462D00752327 /* NotesRepository.swift in Sources */,
 				0AE094F528BFCCFB00752327 /* AppDelegate.swift in Sources */,
 				0AE094F728BFCCFB00752327 /* SceneDelegate.swift in Sources */,
+				0AE0954528C4EE6C00752327 /* Alert+Extension.swift in Sources */,
 				0AE0953B28C242F800752327 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

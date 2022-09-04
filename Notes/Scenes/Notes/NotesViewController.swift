@@ -15,14 +15,7 @@ class NotesViewController: BaseViewController {
     let notesView = NotesView()
     
     let repository = NotesRepository()
-//
-//    var allDummyNotes = [NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
+
     var allNotes: Results<Note>! {
         didSet {
             print("Notes Changed")
@@ -32,9 +25,8 @@ class NotesViewController: BaseViewController {
     
     var pinnedNotes: Results<Note>!
     var unpinnedNotes: Results<Note>!
-    
-    var filteredNotes: [Note] = []
-//    var filteredNotes: Results<Note>!
+//    var foundNotes: [Note] = []
+    var foundNotes: Results<Note>!
     
     var isSearchBarEmpty: Bool {
         return notesView.searchController.searchBar.text?.isEmpty ?? true
@@ -124,7 +116,6 @@ class NotesViewController: BaseViewController {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .systemGray6
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.title = "Zzz"
         
         notesView.addSubview(toolbar)
     }
@@ -155,8 +146,8 @@ class NotesViewController: BaseViewController {
     
     override func setActions() {
         // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기
-        let handler: () -> Void = { self.transition(to: WriteViewController()) }
-        notesView.writeButtonHandler = handler
+//        let handler: () -> Void = { self.transition(to: WriteViewController()) }
+//        notesView.writeButtonHandler = handler
         // 런타임 에러
         // Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+[Notes.NotesViewController writeButtonHandler]: unrecognized selector sent to class 0x104417008'
     }
@@ -168,31 +159,32 @@ class NotesViewController: BaseViewController {
     
     
     func fetchRealm() {
-        print("💟")
+//        print("💟")
         allNotes = repository.fetch()
-        print("🍓")
+//        print("🍓")
         pinnedNotes = repository.fetchPinnedNotes()
 //        print("🍑", pinnedNotes)
-        print("🍑", pinnedNotes.count)
+//        print("🍑", pinnedNotes.count)
         unpinnedNotes = repository.fetchUnpinnedNotes()
 //        print("🤍", unpinnedNotes)
     }
 
     
-    func filterNotesForSearchText(with searchText: String) {
+    func findNotes(with searchText: String) {
 //        searchText.caseInsensitiveCompare(<#T##aString: StringProtocol##StringProtocol#>)
         
-        filteredNotes = allNotes.filter({ note in
-            let titleLowercased = note.title.lowercased()
-            
-            if let contents = note.contents {
-                let contentsLowercased = contents.lowercased()
-                return titleLowercased.contains(searchText) || contentsLowercased.contains(searchText)
-            } else {
-                return titleLowercased.contains(searchText)
-            }
-        })
+//        foundNotes = allNotes.filter({ note in
+//            let titleLowercased = note.title.lowercased()
+//
+//            if let contents = note.contents {
+//                let contentsLowercased = contents.lowercased()
+//                return titleLowercased.contains(searchText) || contentsLowercased.contains(searchText)
+//            } else {
+//                return titleLowercased.contains(searchText)
+//            }
+//        })
         
+        foundNotes = repository.findNotes(with: searchText)
         notesView.tableView.reloadData()
     }
 }
@@ -200,10 +192,12 @@ class NotesViewController: BaseViewController {
 
 extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
+        print(#function)
         return isFiltering ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        print(#function)
         let headerView = UIView()
         let headerTitleLabel: UILabel = {
             let label = UILabel()
@@ -212,7 +206,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }()
         
         if isFiltering {
-            guard let formattedFilterNotesCount = formatNumber(filteredNotes.count) else { return UIView() }
+            guard let formattedFilterNotesCount = formatNumber(foundNotes.count) else { return UIView() }
             headerTitleLabel.text = "\(formattedFilterNotesCount)개 찾음"
         } else {
             if section == 0 {
@@ -224,7 +218,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
                 if unpinnedNotes.isEmpty { return nil }
                 headerTitleLabel.text = "메모"
             }
-//            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
         }
         
         headerView.addSubview(headerTitleLabel)
@@ -238,6 +231,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        print(#function)
         if !isFiltering {
             if section == 0 {
                 guard pinnedNotes != nil else { return 0 }
@@ -255,7 +249,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print(#function)
         if isFiltering {
-            return filteredNotes.count
+            return foundNotes.count
         } else {
             if section == 0 {
                 guard pinnedNotes != nil else { return 0 }
@@ -268,6 +262,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print(#function)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NotesTableViewCell.reuseIdentifier) as? NotesTableViewCell else {
             print("Cannot find NotesTableViewCell")
             return UITableViewCell()
@@ -280,18 +275,14 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
 
            
         if isFiltering {
-            guard !filteredNotes.isEmpty else { return UITableViewCell() }
-            
-            note = filteredNotes[indexPath.row]
+            guard !foundNotes.isEmpty else { return UITableViewCell() }
+            note = foundNotes[indexPath.row]
             
             let filteredNoteTitleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
             guard let filteredNoteContentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else {
                 return UITableViewCell()
             }
 
-            print("💞 filteredNotes: \(filteredNotes)")
-            
-            
             // 추후 develop 시 아이폰 메모 앱처럼 white space나 new lines만 있더라도 메모가 저장되도록 구현하기 위해 "새로운 메모"로 보이도록 미리 구현
             // 현재는 white space나 new lines만 작성할 시 메모가 아예 저장되지 않도록 구현되어 있기 때문에 "새로운 메모"가 테이블 뷰에 보일 일이 X
   
@@ -307,13 +298,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             } else {
                 cell.contentsLabel.attributedText = filteredNoteContentsTrimmed.addAttribute(to: searchText)
             }
-  
-//            cell.titleLabel.attributedText = titleLabelText.addAttribute(to: searchText)
-//            cell.contentsLabel.attributedText = contentsLabelText.addAttribute(to: searchText)
-//            cell.titleLabel.attributedText = filteredNoteTitleTrimmed.addAttribute(to: searchText)
-//            cell.contentsLabel.attributedText = filteredNoteContentsTrimmed?.addAttribute(to: searchText)
-//            filteredNotes[cell.tag].title = filteredNoteTitle.addAttribute(to: searchText).string
-//            filteredNotes[cell.tag].contents = filteredNoteContents?.addAttribute(to: searchText).string
         } else {
             if indexPath.section == 0 {
                 guard !pinnedNotes.isEmpty else { return UITableViewCell() }
@@ -366,7 +350,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         vc.isExistingNote = true
         
         if isFiltering {
-            vc.note = filteredNotes[indexPath.row]
+            vc.note = foundNotes[indexPath.row]
         } else {
             if indexPath.section == 0 {
                 vc.note = pinnedNotes[indexPath.row]
@@ -382,7 +366,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         var note: Note
             
         if isFiltering {
-            note = filteredNotes[indexPath.row]
+            note = foundNotes[indexPath.row]
         } else {
             if indexPath.section == 0 {
                 note = pinnedNotes[indexPath.row]
@@ -409,6 +393,39 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         
         return UISwipeActionsConfiguration(actions: [pin])
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var note: Note
+            
+        if isFiltering {
+            note = foundNotes[indexPath.row]
+        } else {
+            if indexPath.section == 0 {
+                note = pinnedNotes[indexPath.row]
+            } else {
+                note = unpinnedNotes[indexPath.row]
+            }
+        }
+        
+        let delete = UIContextualAction(style: .normal, title: nil) { action, view, completion in
+            print("Delete Button Clicked")
+            
+            self.showAlert(title: "정말 삭제하실 건가요?",
+                           message: "삭제된 메모는 복구가 불가합니다!",
+                           style: .destructive,
+                           allowsCancel: true) { _ in
+                self.repository.deleteNote(note)
+
+                tableView.reloadData()
+                self.setTitle()
+            }
+        }
+        
+        delete.image = UIImage(systemName: "trash.fill")
+        delete.backgroundColor = .systemRed
+        
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
 }
 
 extension NotesViewController: UISearchBarDelegate {
@@ -423,7 +440,7 @@ extension NotesViewController: UISearchResultsUpdating {
         }
         
         searchText = text.lowercased()
-        filterNotesForSearchText(with: searchText)
+        findNotes(with: searchText)
     }
 }
 
