@@ -41,6 +41,13 @@ class WriteViewController: BaseViewController {
         hideAndShowDoneButton(isEditing: !isExistingNote)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print(#function)
+        
+        updateOrSaveNoteToRealm()
+    }
+    
     override func setUI() {
         super.setUI()
         navigationItem.largeTitleDisplayMode = .never
@@ -77,13 +84,17 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func doneButtonClicked() {
+        updateOrSaveNoteToRealm()
+        
+        writeView.endEditing(true)
+    }
+    
+    func updateOrSaveNoteToRealm() {
         if isExistingNote {
             checkChangesAndUpdateNoteToRealm()
         } else {
             saveNoteToRealm()
         }
-        
-        writeView.endEditing(true)
     }
     
     func setNote() -> Note? {
@@ -149,13 +160,13 @@ class WriteViewController: BaseViewController {
     
     func saveNoteToRealm() {
         guard let note = setNote() else { return }
-        print(note)
+//        print(note)
         repository.writeNote(note)
     }
     
     func checkChangesAndUpdateNoteToRealm() {
         guard let editedNote = setNote() else { return }
-        print(editedNote)
+//        print(editedNote)
         
         guard let originalNote = note else { return }
         

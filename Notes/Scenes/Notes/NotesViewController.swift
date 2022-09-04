@@ -13,7 +13,6 @@ class NotesViewController: BaseViewController {
     // MARK: - Properties
     
     let notesView = NotesView()
-    
     let repository = NotesRepository()
 
     var allNotes: Results<Note>! {
@@ -22,10 +21,8 @@ class NotesViewController: BaseViewController {
             notesView.tableView.reloadData()
         }
     }
-    
     var pinnedNotes: Results<Note>!
     var unpinnedNotes: Results<Note>!
-//    var foundNotes: [Note] = []
     var foundNotes: Results<Note>!
     
     var isSearchBarEmpty: Bool {
@@ -87,6 +84,8 @@ class NotesViewController: BaseViewController {
         
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        print(#function)
         
         fetchRealm()
         setTitle()
@@ -174,9 +173,17 @@ class NotesViewController: BaseViewController {
     
     
     func fetchRealm() {
+        print(#function)
         allNotes = repository.fetch()
         pinnedNotes = repository.fetchPinnedNotes()
         unpinnedNotes = repository.fetchUnpinnedNotes()
+        notesView.tableView.reloadData()
+        
+        // Realm DB에 Create/Update 하는 시간 문제로 인한 처리 - 개선 필요
+        // 긴 메모일 경우 시간이 더 오래 걸리기 때문에 0.5 초 이상 걸릴 수 있음 -> 아래 코드로는 리스트의 변화를 볼 수 없음
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.notesView.tableView.reloadData()
+        }
     }
 
     
