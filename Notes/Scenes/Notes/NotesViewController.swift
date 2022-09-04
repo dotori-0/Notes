@@ -172,10 +172,10 @@ class NotesViewController: BaseViewController {
         allNotes = repository.fetch()
         print("🍓")
         pinnedNotes = repository.fetchPinnedNotes()
-        print("🍑", pinnedNotes)
+//        print("🍑", pinnedNotes)
         print("🍑", pinnedNotes.count)
         unpinnedNotes = repository.fetchUnpinnedNotes()
-        print("🤍", unpinnedNotes)
+//        print("🤍", unpinnedNotes)
     }
 
     
@@ -237,7 +237,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {        
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if !isFiltering {
             if section == 0 {
                 guard pinnedNotes != nil else { return 0 }
@@ -264,8 +264,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
                 guard unpinnedNotes != nil else { return 0 }
                 return unpinnedNotes.count
             }
-//            guard pinnedNotes, unpinnedNotes
-//            return section == 0 ? pinnedNotes.count : unpinnedNotes.count
         }
     }
     
@@ -292,9 +290,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             }
 
             print("💞 filteredNotes: \(filteredNotes)")
-            
-//            let titleLabelText = filteredNoteTitleTrimmed.isEmpty ? "새로운 메모" : filteredNoteTitleTrimmed
-//            let contentsLabelText = filteredNoteContentsTrimmed.isEmpty ? "추가 텍스트 없음" : filteredNoteContentsTrimmed
             
             
             // 추후 develop 시 아이폰 메모 앱처럼 white space나 new lines만 있더라도 메모가 저장되도록 구현하기 위해 "새로운 메모"로 보이도록 미리 구현
@@ -373,7 +368,11 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         if isFiltering {
             vc.note = filteredNotes[indexPath.row]
         } else {
-            vc.note = allNotes[indexPath.row]
+            if indexPath.section == 0 {
+                vc.note = pinnedNotes[indexPath.row]
+            } else {
+                vc.note = unpinnedNotes[indexPath.row]
+            }
         }
         
         transition(to: vc)
@@ -395,9 +394,12 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         let pin = UIContextualAction(style: .normal, title: nil) { action, view, completion in
             print("Pin Button Clicked")
             
-            self.repository.updatePinned(of: note)
+            if !note.isPinned && self.pinnedNotes.count == 5 {
+                self.showAlert(title: "고정 개수 제한 안내", message: "메모 고정 개수는 5개로 제한됩니다!")
+            } else {
+                self.repository.updatePinned(of: note)
+            }
             
-//            self.fetchRealm()
             tableView.reloadData()
         }
         
@@ -408,7 +410,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [pin])
     }
 }
-
 
 extension NotesViewController: UISearchBarDelegate {
     
