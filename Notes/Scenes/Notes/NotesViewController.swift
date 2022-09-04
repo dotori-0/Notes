@@ -299,7 +299,12 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = WriteViewController()
         vc.isExistingNote = true
-        vc.note = allNotes[indexPath.row]
+        
+        if isFiltering {
+            vc.note = filteredNotes[indexPath.row]
+        } else {
+            vc.note = allNotes[indexPath.row]
+        }
         
         transition(to: vc)
     }

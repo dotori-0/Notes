@@ -55,8 +55,13 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func doneButtonClicked() {
-        saveNoteToRealm()
-        navigationController?.popViewController(animated: true)
+        if isExistingNote {
+            updateNoteToRealm()
+        } else {
+            saveNoteToRealm()
+        }
+        
+//        navigationController?.popViewController(animated: true)
     }
     
     func saveNoteToRealm() {
@@ -89,5 +94,31 @@ class WriteViewController: BaseViewController {
         let note = Note(title: title, contents: contents)
         print(note)
         repository.writeNote(note)
+    }
+    
+    func updateNoteToRealm() {
+        guard let text = writeView.textView.text else {
+            print("Cannot find text in Text View")
+            return
+        }
+        
+        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
+        
+        guard let title = titleAndContentsArray.first else {
+            print("Cannot find title")
+            return
+        }
+
+        print("text.hasPrefix(title): \(text.hasPrefix(title))")
+        
+        let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
+        let contents = String(contentsSubsequence)             // Non-optional
+        
+        let editedNote = Note(title: title, contents: contents)
+        print(editedNote)
+        
+        guard let originalNote = note else { return }
+        
+        repository.updateNote(from: originalNote, to: editedNote)
     }
 }
