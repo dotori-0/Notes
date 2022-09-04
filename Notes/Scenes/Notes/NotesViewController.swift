@@ -215,21 +215,18 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
 //        cell.tag = indexPath.row
+
         
-        cell.dateAndTimeLabel.text = "2022.09.01"
-        
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko-KR")
-        let calendar = Calendar.current
-        
-        print(isFiltering)
+        var note: Note
 
            
         if isFiltering {
             guard !filteredNotes.isEmpty else { return UITableViewCell() }
             
-            let filteredNoteTitle = filteredNotes[indexPath.row].title
-            let filteredNoteContents = filteredNotes[indexPath.row].contents?.trimAllNewLines()
+            note = filteredNotes[indexPath.row]
+            
+            let filteredNoteTitle = note.title
+            let filteredNoteContents = note.contents?.trimAllNewLines()
 //            let filteredNoteTitle = allNotes[cell.tag].title
 //            let filteredNoteContents = allNotes[cell.tag].contents?.trimAllNewLines()
             print("💞 filteredNotes: \(filteredNotes)")
@@ -242,27 +239,22 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
 //            print("🐤")
             guard !allNotes.isEmpty else { return UITableViewCell() }
             
-            let note = allNotes[indexPath.row]
+            note = allNotes[indexPath.row]
             
-            let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
-            let weekOfEditDate = editDateComponent.weekOfYear
-            
-            let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
-            let weekOfToday = currentDateComponent.weekOfYear
-        
-            
-            if calendar.isDateInToday(note.editDate) {
-                formatter.dateFormat = "a hh:mm"
-            } else if weekOfEditDate == weekOfToday {
-                formatter.dateFormat = "EEEE"
-            } else {
-                formatter.dateFormat = "yyyy. MM. dd a hh:mm"
-            }
-            
-//            print(note.title)
-//            print(note.contents)
-            
-//            guard note.contents != nil else { return UITableViewCell() }
+//            let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
+//            let weekOfEditDate = editDateComponent.weekOfYear
+//
+//            let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
+//            let weekOfToday = currentDateComponent.weekOfYear
+//
+//
+//            if calendar.isDateInToday(note.editDate) {
+//                formatter.dateFormat = "a hh:mm"
+//            } else if weekOfEditDate == weekOfToday {
+//                formatter.dateFormat = "EEEE"
+//            } else {
+//                formatter.dateFormat = "yyyy. MM. dd a hh:mm"
+//            }
             
             guard let contentsNewLinesRemoved = note.contents?.trimAllNewLines() else { return UITableViewCell() }
 //            print("✂️ \(contentsNewLinesRemoved)")
@@ -271,10 +263,33 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             // 내용으로 엔터만 쳤을 경우 note.contents가 Optional("\n\n\n\n\n\n\n")이기 때문에
             
             cell.titleLabel.text = note.title
-            cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
+//            cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
 //            cell.contentsLabel.text = note.contents?.trimAllNewLines()
             cell.contentsLabel.text = contentsLabelText
         }
+        
+        
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        let calendar = Calendar.current
+        
+        let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
+        let weekOfEditDate = editDateComponent.weekOfYear
+        
+        let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
+        let weekOfToday = currentDateComponent.weekOfYear
+        
+        if calendar.isDateInToday(note.editDate) {
+            formatter.dateFormat = "a hh:mm"
+        } else if weekOfEditDate == weekOfToday {
+            formatter.dateFormat = "EEEE"
+        } else {
+            formatter.dateFormat = "yyyy. MM. dd a hh:mm"
+        }
+        
+        cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
+        
 
         return cell
     }
