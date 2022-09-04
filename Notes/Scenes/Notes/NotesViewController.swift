@@ -152,6 +152,8 @@ class NotesViewController: BaseViewController {
 
     
     func filterNotesForSearchText(with searchText: String) {
+//        searchText.caseInsensitiveCompare(<#T##aString: StringProtocol##StringProtocol#>)
+        
         filteredNotes = allNotes.filter({ note in
             let titleLowercased = note.title.lowercased()
             
