@@ -54,7 +54,12 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func shareButtonClicked() {
-        
+        showActivityViewController()
+    }
+    
+    func showActivityViewController() {
+        let vc = UIActivityViewController(activityItems: [writeView.textView.text], applicationActivities: [])
+        present(vc, animated: true)
     }
     
     @objc func doneButtonClicked() {
