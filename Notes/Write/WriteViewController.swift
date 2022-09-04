@@ -31,7 +31,6 @@ class WriteViewController: BaseViewController {
         
         writeView.textView.delegate = self
 
-        print("selected note: \(note)")
         if isExistingNote {
             showExistingNote()
         } else {
@@ -85,7 +84,7 @@ class WriteViewController: BaseViewController {
     
     @objc func doneButtonClicked() {
         updateOrSaveNoteToRealm()
-        
+        isExistingNote = true
         writeView.endEditing(true)
     }
     
@@ -160,17 +159,19 @@ class WriteViewController: BaseViewController {
     
     func saveNoteToRealm() {
         guard let note = setNote() else { return }
-//        print(note)
         repository.writeNote(note)
+        self.note = note
     }
     
     func checkChangesAndUpdateNoteToRealm() {
         guard let editedNote = setNote() else { return }
-//        print(editedNote)
+        print("🌲", editedNote)
         
         guard let originalNote = note else { return }
+        print("🍁", originalNote)
         
         if originalNote.title != editedNote.title || originalNote.contents != editedNote.contents  {
+            print("달라~~~~~")
             repository.updateNote(from: originalNote, to: editedNote)
         }
     }
