@@ -56,11 +56,12 @@ class WriteViewController: BaseViewController {
     
     @objc func doneButtonClicked() {
         if isExistingNote {
-            updateNoteToRealm()
+            checkChangesAndUpdateNoteToRealm()
         } else {
             saveNoteToRealm()
         }
         
+        writeView.endEditing(true)
 //        navigationController?.popViewController(animated: true)
     }
     
@@ -96,7 +97,7 @@ class WriteViewController: BaseViewController {
         repository.writeNote(note)
     }
     
-    func updateNoteToRealm() {
+    func checkChangesAndUpdateNoteToRealm() {
         guard let text = writeView.textView.text else {
             print("Cannot find text in Text View")
             return
@@ -119,6 +120,8 @@ class WriteViewController: BaseViewController {
         
         guard let originalNote = note else { return }
         
-        repository.updateNote(from: originalNote, to: editedNote)
+        if originalNote.title != editedNote.title || originalNote.contents != editedNote.contents  {
+            repository.updateNote(from: originalNote, to: editedNote)
+        }
     }
 }
