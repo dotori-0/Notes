@@ -15,13 +15,6 @@ class WriteView: BaseView {
         return view
     }()
     
-    let testLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Test"
-        label.font = .boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -32,7 +25,6 @@ class WriteView: BaseView {
     
     override func setUI() {
         addSubview(textView)
-        addSubview(testLabel)
     }
     
     override func setConstraints() {
@@ -43,10 +35,6 @@ class WriteView: BaseView {
             make.top.bottom.equalToSuperview()
 //            make.top.equalToSuperview()
 //            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
-        }
-        
-        testLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
         }
     }
 }

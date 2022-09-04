@@ -38,7 +38,7 @@ extension String {
         return attributedString
     }
     
-    func trimAllNewLines() -> String {
-        return self.trimmingCharacters(in: .newlines)
+    func trimAllWhiteSpacesAndNewlines() -> String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

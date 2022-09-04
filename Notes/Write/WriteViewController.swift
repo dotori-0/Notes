@@ -75,26 +75,53 @@ class WriteViewController: BaseViewController {
             return
         }
         
-        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
-//        print(titleAndContentsArray)
-        guard let title = titleAndContentsArray.first else {
-            print("Cannot find title")
+        // 리턴키를 기준으로 타이틀 구별하기
+        let titleAndContentsArraySeparatedByNewLines = writeView.textView.text.components(separatedBy: .newlines)
+        print(titleAndContentsArraySeparatedByNewLines)
+
+        // 타이틀에도 스페이스 하나 조차 없이 아예 비어 있다면 저장하지 않도록
+        guard let firstElementOfTitleAndContentsArraySeparatedByNewLines = titleAndContentsArraySeparatedByNewLines.first else {
+            print("Cannot find the first element of titleAndContentsArraySeparatedByNewLines")
             return
         }
+        
+        if titleAndContentsArraySeparatedByNewLines.count == 1 && firstElementOfTitleAndContentsArraySeparatedByNewLines.isEmpty {
+            return
+        }
+        print("💚 titleAndContentsArraySeparatedByNewLines: \(titleAndContentsArraySeparatedByNewLines)")
+        
+        
+        // 처음으로 적는 텍스트가 제목이 되도록
+        var realTextsArray: [String] = []
+        
+        for text in titleAndContentsArraySeparatedByNewLines {
+            let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmedText.isEmpty {
+                realTextsArray.append(trimmedText)
+            }
+        }
+        
+        guard let firstRealText = realTextsArray.first else {
+            print("No real text at all")
+            return
+        }
+        
+        print("💙 firstRealText: \(firstRealText)")
+        let titleAndContentsArraySeparatedByFirstRealText = writeView.textView.text.components(separatedBy: firstRealText)
+        print("💜", titleAndContentsArraySeparatedByFirstRealText)
+        
+        guard let whiteSpacesAndNewLinesBeforeTheFirstRealText = titleAndContentsArraySeparatedByFirstRealText.first else {
+            print("Cannot find whiteSpacesAndNewLinesBeforeTheFirstRealText")
+            return
+        }
+        
+        let title = "\(whiteSpacesAndNewLinesBeforeTheFirstRealText)\(firstRealText)"
+        
 
-//        print("title: \(title)")
         print("text.hasPrefix(title): \(text.hasPrefix(title))")
         
         let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
         let contents = String(contentsSubsequence)             // Non-optional
-
-//        guard let contents = String(contentsSubsequence) else {
-//            print("Cannot change contentsSubsequence to String")
-//            return
-//        }
-//        print(contents)
-//        print(type(of: contentsSubsequence))
-//        print(type(of: contents))
         
         let note = Note(title: title, contents: contents)
         print(note)

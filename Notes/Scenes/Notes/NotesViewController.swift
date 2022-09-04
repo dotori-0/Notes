@@ -227,46 +227,53 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             
             note = filteredNotes[indexPath.row]
             
-            let filteredNoteTitle = note.title
-            let filteredNoteContents = note.contents?.trimAllNewLines()
+            let filteredNoteTitleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
+            guard let filteredNoteContentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else {
+                return UITableViewCell()
+            }
 //            let filteredNoteTitle = allNotes[cell.tag].title
 //            let filteredNoteContents = allNotes[cell.tag].contents?.trimAllNewLines()
             print("💞 filteredNotes: \(filteredNotes)")
             
-            cell.titleLabel.attributedText = filteredNoteTitle.addAttribute(to: searchText)
-            cell.contentsLabel.attributedText = filteredNoteContents?.addAttribute(to: searchText)
+//            let titleLabelText = filteredNoteTitleTrimmed.isEmpty ? "새로운 메모" : filteredNoteTitleTrimmed
+//            let contentsLabelText = filteredNoteContentsTrimmed.isEmpty ? "추가 텍스트 없음" : filteredNoteContentsTrimmed
+            
+            
+            // 추후 develop 시 아이폰 메모 앱처럼 white space나 new lines만 있더라도 메모가 저장되도록 구현하기 위해 "새로운 메모"로 보이도록 미리 구현
+            // 현재는 white space나 new lines만 작성할 시 메모가 아예 저장되지 않도록 구현되어 있기 때문에 "새로운 메모"가 테이블 뷰에 보일 일이 X
+  
+            // "새로운 메모" 및 "추가 텍스트 없음"에서 텍스트 컬러 변경이 일어나지 않도록
+            if filteredNoteTitleTrimmed.isEmpty {
+                cell.titleLabel.text = "새로운 메모"
+            } else {
+                cell.titleLabel.attributedText = filteredNoteTitleTrimmed.addAttribute(to: searchText)
+            }
+
+            if filteredNoteContentsTrimmed.isEmpty {
+                cell.contentsLabel.text = "추가 텍스트 없음"
+            } else {
+                cell.contentsLabel.attributedText = filteredNoteContentsTrimmed.addAttribute(to: searchText)
+            }
+  
+//            cell.titleLabel.attributedText = titleLabelText.addAttribute(to: searchText)
+//            cell.contentsLabel.attributedText = contentsLabelText.addAttribute(to: searchText)
+//            cell.titleLabel.attributedText = filteredNoteTitleTrimmed.addAttribute(to: searchText)
+//            cell.contentsLabel.attributedText = filteredNoteContentsTrimmed?.addAttribute(to: searchText)
 //            filteredNotes[cell.tag].title = filteredNoteTitle.addAttribute(to: searchText).string
 //            filteredNotes[cell.tag].contents = filteredNoteContents?.addAttribute(to: searchText).string
         } else {
-//            print("🐤")
             guard !allNotes.isEmpty else { return UITableViewCell() }
             
             note = allNotes[indexPath.row]
             
-//            let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
-//            let weekOfEditDate = editDateComponent.weekOfYear
-//
-//            let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
-//            let weekOfToday = currentDateComponent.weekOfYear
-//
-//
-//            if calendar.isDateInToday(note.editDate) {
-//                formatter.dateFormat = "a hh:mm"
-//            } else if weekOfEditDate == weekOfToday {
-//                formatter.dateFormat = "EEEE"
-//            } else {
-//                formatter.dateFormat = "yyyy. MM. dd a hh:mm"
-//            }
+            let titleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
+            guard let contentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else { return UITableViewCell() }
             
-            guard let contentsNewLinesRemoved = note.contents?.trimAllNewLines() else { return UITableViewCell() }
-//            print("✂️ \(contentsNewLinesRemoved)")
-            
-            let contentsLabelText = contentsNewLinesRemoved.isEmpty ? "추가 텍스트 없음" : contentsNewLinesRemoved
+            let titleLabelText = titleTrimmed.isEmpty ? "새로운 메모" : titleTrimmed
+            let contentsLabelText = contentsTrimmed.isEmpty ? "추가 텍스트 없음" : contentsTrimmed
             // 내용으로 엔터만 쳤을 경우 note.contents가 Optional("\n\n\n\n\n\n\n")이기 때문에
             
-            cell.titleLabel.text = note.title
-//            cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
-//            cell.contentsLabel.text = note.contents?.trimAllNewLines()
+            cell.titleLabel.text = titleLabelText
             cell.contentsLabel.text = contentsLabelText
         }
         

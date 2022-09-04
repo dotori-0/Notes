@@ -14,7 +14,6 @@ class NotesTableViewCell: BaseTableViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
-//        label.backgroundColor = .systemGray4
         return label
     }()
     
