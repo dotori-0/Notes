@@ -51,7 +51,6 @@ class WriteViewController: BaseViewController {
         if let contents = note?.contents {
             writeView.textView.text += contents
         }
-//        writeView.textView.text += note?.contents
     }
     
     @objc func shareButtonClicked() {
@@ -69,50 +68,52 @@ class WriteViewController: BaseViewController {
 //        navigationController?.popViewController(animated: true)
     }
     
-    func saveNoteToRealm() {
+    func setNote() -> Note? {
         guard let text = writeView.textView.text else {
             print("Cannot find text in Text View")
-            return
+            return nil
         }
         
-        // 리턴키를 기준으로 타이틀 구별하기
-        let titleAndContentsArraySeparatedByNewLines = writeView.textView.text.components(separatedBy: .newlines)
-        print(titleAndContentsArraySeparatedByNewLines)
+        // 리턴키를 기준으로 텍스트 분리
+        let writtenTextsArraySeparatedByNewLines = writeView.textView.text.components(separatedBy: .newlines)
+        print("💛", writtenTextsArraySeparatedByNewLines)
 
+        // 분리된 배열의 첫 번째 요소
+        guard let firstElementOfWrittenTextsArraySeparatedByNewLines = writtenTextsArraySeparatedByNewLines.first else {
+            print("Cannot find the first element of writtenTextsArraySeparatedByNewLines")
+            return nil
+        }
+        
         // 타이틀에도 스페이스 하나 조차 없이 아예 비어 있다면 저장하지 않도록
-        guard let firstElementOfTitleAndContentsArraySeparatedByNewLines = titleAndContentsArraySeparatedByNewLines.first else {
-            print("Cannot find the first element of titleAndContentsArraySeparatedByNewLines")
-            return
+        if writtenTextsArraySeparatedByNewLines.count == 1 && firstElementOfWrittenTextsArraySeparatedByNewLines.isEmpty {
+            return nil
         }
-        
-        if titleAndContentsArraySeparatedByNewLines.count == 1 && firstElementOfTitleAndContentsArraySeparatedByNewLines.isEmpty {
-            return
-        }
-        print("💚 titleAndContentsArraySeparatedByNewLines: \(titleAndContentsArraySeparatedByNewLines)")
+        print("💚 writtenTextsArraySeparatedByNewLines: \(writtenTextsArraySeparatedByNewLines)")
         
         
-        // 처음으로 적는 텍스트가 제목이 되도록
+        // 실제로 작성하는 텍스트와 그 후의 리턴 키를 기준으로 타이틀을 분리
         var realTextsArray: [String] = []
         
-        for text in titleAndContentsArraySeparatedByNewLines {
+        for text in writtenTextsArraySeparatedByNewLines {
             let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
             if !trimmedText.isEmpty {
                 realTextsArray.append(trimmedText)
             }
         }
         
+        // 실제 텍스트가 아예 없을 시 저장되지 않도록
         guard let firstRealText = realTextsArray.first else {
             print("No real text at all")
-            return
+            return nil
         }
         
         print("💙 firstRealText: \(firstRealText)")
-        let titleAndContentsArraySeparatedByFirstRealText = writeView.textView.text.components(separatedBy: firstRealText)
-        print("💜", titleAndContentsArraySeparatedByFirstRealText)
+        let writtenTextsArraySeparatedByFirstRealText = writeView.textView.text.components(separatedBy: firstRealText)
+        print("💜", writtenTextsArraySeparatedByFirstRealText)
         
-        guard let whiteSpacesAndNewLinesBeforeTheFirstRealText = titleAndContentsArraySeparatedByFirstRealText.first else {
+        guard let whiteSpacesAndNewLinesBeforeTheFirstRealText = writtenTextsArraySeparatedByFirstRealText.first else {
             print("Cannot find whiteSpacesAndNewLinesBeforeTheFirstRealText")
-            return
+            return nil
         }
         
         let title = "\(whiteSpacesAndNewLinesBeforeTheFirstRealText)\(firstRealText)"
@@ -124,29 +125,37 @@ class WriteViewController: BaseViewController {
         let contents = String(contentsSubsequence)             // Non-optional
         
         let note = Note(title: title, contents: contents)
+        
+        return note
+    }
+    
+    func saveNoteToRealm() {
+//        let note = Note(title: title, contents: contents)
+        guard let note = setNote() else { return }
         print(note)
         repository.writeNote(note)
     }
     
     func checkChangesAndUpdateNoteToRealm() {
-        guard let text = writeView.textView.text else {
-            print("Cannot find text in Text View")
-            return
-        }
+//        guard let text = writeView.textView.text else {
+//            print("Cannot find text in Text View")
+//            return
+//        }
+//
+//        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
+//
+//        guard let title = titleAndContentsArray.first else {
+//            print("Cannot find title")
+//            return
+//        }
+//
+//        print("text.hasPrefix(title): \(text.hasPrefix(title))")
+//
+//        let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
+//        let contents = String(contentsSubsequence)             // Non-optional
         
-        let titleAndContentsArray = writeView.textView.text.components(separatedBy: .newlines)
-        
-        guard let title = titleAndContentsArray.first else {
-            print("Cannot find title")
-            return
-        }
-
-        print("text.hasPrefix(title): \(text.hasPrefix(title))")
-        
-        let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
-        let contents = String(contentsSubsequence)             // Non-optional
-        
-        let editedNote = Note(title: title, contents: contents)
+//        let editedNote = Note(title: title, contents: contents)
+        guard let editedNote = setNote() else { return }
         print(editedNote)
         
         guard let originalNote = note else { return }
