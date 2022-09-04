@@ -12,7 +12,6 @@ class WriteView: BaseView {
         let view = UITextView()
         view.font = .boldSystemFont(ofSize: 15)
         view.becomeFirstResponder()
-        view.backgroundColor = .systemGray6
         return view
     }()
     

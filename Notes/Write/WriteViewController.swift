@@ -32,6 +32,7 @@ class WriteViewController: BaseViewController {
     }
     
     override func setUI() {
+        super.setUI()
         navigationItem.largeTitleDisplayMode = .never
         
         let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))

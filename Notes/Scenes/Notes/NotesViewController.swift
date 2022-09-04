@@ -105,7 +105,7 @@ class NotesViewController: BaseViewController {
 
 
     override func setUI() {
-        print("💙", #function)
+        super.setUI()
         title = "1234개의 메모"
         
         guard navigationController != nil else {
