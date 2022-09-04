@@ -17,6 +17,7 @@ protocol RealmProtocol {
     func updateNote(from originalNote: Note, to editedNote: Note)
     func updatePinned(of note: Note)
     func deleteNote(_ note: Note)
+    func deleteNote(id: ObjectId)
 }
 
 struct NotesRepository: RealmProtocol {
@@ -89,6 +90,16 @@ struct NotesRepository: RealmProtocol {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    func deleteNote(id: ObjectId) {
+        let noteToBeDeleted = fetch().where {
+            $0.objectId == id
+        }
+        
+        if let note = noteToBeDeleted.first {
+            deleteNote(note)
         }
     }
 }

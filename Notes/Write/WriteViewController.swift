@@ -14,7 +14,9 @@ class WriteViewController: BaseViewController {
     let writeView = WriteView()
     let repository = NotesRepository()
     
+    var isFromSearch = false
     var isExistingNote = false
+    var deletedNote = false
     var note: Note?
     
     var barButtons: [UIBarButtonItem] = []
@@ -44,13 +46,15 @@ class WriteViewController: BaseViewController {
         super.viewDidDisappear(animated)
         print(#function)
         
-        updateOrSaveNoteToRealm()
+        if !deletedNote {
+            updateOrSaveNoteToRealm()
+        }
     }
     
     override func setUI() {
         super.setUI()
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.backButtonTitle = "메모"
+        navigationController?.navigationBar.topItem?.title = isFromSearch ? "검색" : "메모"
     }
     
     func hideAndShowDoneButton(isEditing: Bool) {
@@ -164,7 +168,14 @@ class WriteViewController: BaseViewController {
     }
     
     func checkChangesAndUpdateNoteToRealm() {
-        guard let editedNote = setNote() else { return }
+        guard let editedNote = setNote() else {
+            if let originalNote = note {
+                repository.deleteNote(id: originalNote.objectId)
+                deletedNote = true
+                print("Successfully Deleted")
+            }
+            return
+        }
         print("🌲", editedNote)
         
         guard let originalNote = note else { return }

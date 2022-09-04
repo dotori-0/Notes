@@ -81,6 +81,7 @@ class NotesViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        notesView.tableView.reloadData()
         
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -90,12 +91,18 @@ class NotesViewController: BaseViewController {
         fetchRealm()
         setTitle()
     }
-    
+   
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         navigationItem.hidesSearchBarWhenScrolling = true
+        
+        // Realm DB에 Create/Update 하는 시간 문제로 인한 처리 - 개선 필요
+        // 긴 메모일 경우 시간이 더 오래 걸리기 때문에 0.2 초 이상 걸릴 수 있음 -> 아래 코드로는 리스트의 변화를 볼 수 없음
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.notesView.tableView.reloadData()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -178,12 +185,6 @@ class NotesViewController: BaseViewController {
         pinnedNotes = repository.fetchPinnedNotes()
         unpinnedNotes = repository.fetchUnpinnedNotes()
         notesView.tableView.reloadData()
-        
-        // Realm DB에 Create/Update 하는 시간 문제로 인한 처리 - 개선 필요
-        // 긴 메모일 경우 시간이 더 오래 걸리기 때문에 0.5 초 이상 걸릴 수 있음 -> 아래 코드로는 리스트의 변화를 볼 수 없음
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.notesView.tableView.reloadData()
-        }
     }
 
     
@@ -350,6 +351,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         
         if isFiltering {
             vc.note = foundNotes[indexPath.row]
+            vc.isFromSearch = true
         } else {
             if indexPath.section == 0 {
                 vc.note = pinnedNotes[indexPath.row]
