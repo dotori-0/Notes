@@ -29,7 +29,8 @@ class NotesViewController: BaseViewController {
             notesView.tableView.reloadData()
         }
     }
-    var filteredNotes: [NotesModel] = []
+    var filteredNotes: [Note] = []
+//    var filteredNotes: Results<Note>!
     
     var isSearchBarEmpty: Bool {
         return notesView.searchController.searchBar.text?.isEmpty ?? true
@@ -192,18 +193,12 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        print("🐹 \(UIScreen.main.bounds.height)")  // 🐹 896.0
+//        print("🐹 \(UIScreen.main.bounds.height)")  // 🐹 896.0
         return 50  // 약 0.18배
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-            return filteredNotes.count
-        } else {
-//            return section == 0 ? 2 : allDummyNotes.count
-//            return section == 0 ? 2 : allNotes.count
-            return allNotes.count
-        }
+        return isFiltering ? filteredNotes.count : allNotes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -212,23 +207,32 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         
+//        cell.tag = indexPath.row
+        
         cell.dateAndTimeLabel.text = "2022.09.01"
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko-KR")
         let calendar = Calendar.current
+        
+        print(isFiltering)
 
            
         if isFiltering {
             guard !filteredNotes.isEmpty else { return UITableViewCell() }
             
             let filteredNoteTitle = filteredNotes[indexPath.row].title
-            let filteredNoteContents = filteredNotes[indexPath.row].contents
+            let filteredNoteContents = filteredNotes[indexPath.row].contents?.trimAllNewLines()
+//            let filteredNoteTitle = allNotes[cell.tag].title
+//            let filteredNoteContents = allNotes[cell.tag].contents?.trimAllNewLines()
+            print("💞 filteredNotes: \(filteredNotes)")
             
             cell.titleLabel.attributedText = filteredNoteTitle.addAttribute(to: searchText)
-            cell.contentsLabel.attributedText = filteredNoteContents.addAttribute(to: searchText)
+            cell.contentsLabel.attributedText = filteredNoteContents?.addAttribute(to: searchText)
+//            filteredNotes[cell.tag].title = filteredNoteTitle.addAttribute(to: searchText).string
+//            filteredNotes[cell.tag].contents = filteredNoteContents?.addAttribute(to: searchText).string
         } else {
-            print("🐤")
+//            print("🐤")
             guard !allNotes.isEmpty else { return UITableViewCell() }
             
             let note = allNotes[indexPath.row]
@@ -248,13 +252,13 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
                 formatter.dateFormat = "yyyy. MM. dd a hh:mm"
             }
             
-            print(note.title)
-            print(note.contents)
+//            print(note.title)
+//            print(note.contents)
             
 //            guard note.contents != nil else { return UITableViewCell() }
             
             guard let contentsNewLinesRemoved = note.contents?.trimAllNewLines() else { return UITableViewCell() }
-            print("✂️ \(contentsNewLinesRemoved)")
+//            print("✂️ \(contentsNewLinesRemoved)")
             
             let contentsLabelText = contentsNewLinesRemoved.isEmpty ? "추가 텍스트 없음" : contentsNewLinesRemoved
             // 내용으로 엔터만 쳤을 경우 note.contents가 Optional("\n\n\n\n\n\n\n")이기 때문에
