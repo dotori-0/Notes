@@ -21,6 +21,22 @@ struct NotesRepository: RealmProtocol {
         return realm.objects(Note.self).sorted(byKeyPath: "editDate", ascending: false)
     }
     
+    func fetchPinnedNotes() -> Results<Note> {
+        let pinnedNotes = fetch().where {
+            $0.isPinned == true
+        }
+        
+        return pinnedNotes
+    }
+    
+    func fetchUnpinnedNotes() -> Results<Note> {
+        let unpinnedNotes = fetch().where {
+            $0.isPinned == false
+        }
+        
+        return unpinnedNotes
+    }
+    
     func writeNote(_ note: Note) {
         do {
             try realm.write {
@@ -48,6 +64,16 @@ struct NotesRepository: RealmProtocol {
 //                @Persisted var title: String       // 제목(필수)
 //                @Persisted var contents: String?   // 내용(추가 텍스트)(옵션)
 //                @Persisted var isPinned: Bool      // 고정 여부(필수)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func updatePinned(of note: Note) {
+        do {
+            try realm.write {
+                note.isPinned.toggle()
             }
         } catch {
             print(error)

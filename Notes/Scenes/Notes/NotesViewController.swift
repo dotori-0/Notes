@@ -29,6 +29,10 @@ class NotesViewController: BaseViewController {
             notesView.tableView.reloadData()
         }
     }
+    
+    var pinnedNotes: Results<Note>!
+    var unpinnedNotes: Results<Note>!
+    
     var filteredNotes: [Note] = []
 //    var filteredNotes: Results<Note>!
     
@@ -164,7 +168,14 @@ class NotesViewController: BaseViewController {
     
     
     func fetchRealm() {
+        print("💟")
         allNotes = repository.fetch()
+        print("🍓")
+        pinnedNotes = repository.fetchPinnedNotes()
+        print("🍑", pinnedNotes)
+        print("🍑", pinnedNotes.count)
+        unpinnedNotes = repository.fetchUnpinnedNotes()
+        print("🤍", unpinnedNotes)
     }
 
     
@@ -189,8 +200,7 @@ class NotesViewController: BaseViewController {
 
 extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-//        return isFiltering ? 1 : 2
-        return 1
+        return isFiltering ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -205,8 +215,16 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             guard let formattedFilterNotesCount = formatNumber(filteredNotes.count) else { return UIView() }
             headerTitleLabel.text = "\(formattedFilterNotesCount)개 찾음"
         } else {
+            if section == 0 {
+                guard pinnedNotes != nil else { return nil }
+                if pinnedNotes.isEmpty { return nil }
+                headerTitleLabel.text = "고정된 메모"
+            } else {
+                guard unpinnedNotes != nil else { return nil }
+                if unpinnedNotes.isEmpty { return nil }
+                headerTitleLabel.text = "메모"
+            }
 //            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
-            headerTitleLabel.text = "메모"
         }
         
         headerView.addSubview(headerTitleLabel)
@@ -219,13 +237,36 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {        
+        if !isFiltering {
+            if section == 0 {
+                guard pinnedNotes != nil else { return 0 }
+                if pinnedNotes.isEmpty { return 0 }
+            } else {
+                guard unpinnedNotes != nil else { return 0 }
+                if unpinnedNotes.isEmpty { return 0 }
+            }
+        }
+
 //        print("🐹 \(UIScreen.main.bounds.height)")  // 🐹 896.0
         return 50  // 약 0.18배
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isFiltering ? filteredNotes.count : allNotes.count
+        print(#function)
+        if isFiltering {
+            return filteredNotes.count
+        } else {
+            if section == 0 {
+                guard pinnedNotes != nil else { return 0 }
+                return pinnedNotes.count
+            } else {
+                guard unpinnedNotes != nil else { return 0 }
+                return unpinnedNotes.count
+            }
+//            guard pinnedNotes, unpinnedNotes
+//            return section == 0 ? pinnedNotes.count : unpinnedNotes.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -249,8 +290,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             guard let filteredNoteContentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else {
                 return UITableViewCell()
             }
-//            let filteredNoteTitle = allNotes[cell.tag].title
-//            let filteredNoteContents = allNotes[cell.tag].contents?.trimAllNewLines()
+
             print("💞 filteredNotes: \(filteredNotes)")
             
 //            let titleLabelText = filteredNoteTitleTrimmed.isEmpty ? "새로운 메모" : filteredNoteTitleTrimmed
@@ -280,9 +320,15 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
 //            filteredNotes[cell.tag].title = filteredNoteTitle.addAttribute(to: searchText).string
 //            filteredNotes[cell.tag].contents = filteredNoteContents?.addAttribute(to: searchText).string
         } else {
-            guard !allNotes.isEmpty else { return UITableViewCell() }
-            
-            note = allNotes[indexPath.row]
+            if indexPath.section == 0 {
+                guard !pinnedNotes.isEmpty else { return UITableViewCell() }
+                note = pinnedNotes[indexPath.row]
+            } else {
+                guard !unpinnedNotes.isEmpty else { return UITableViewCell() }
+                note = unpinnedNotes[indexPath.row]
+            }
+//            guard !allNotes.isEmpty else { return UITableViewCell() }
+//            note = allNotes[indexPath.row]
             
             let titleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
             guard let contentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else { return UITableViewCell() }
@@ -294,7 +340,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             cell.titleLabel.text = titleLabelText
             cell.contentsLabel.text = contentsLabelText
         }
-        
         
         
         let formatter = DateFormatter()
@@ -332,6 +377,35 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         transition(to: vc)
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var note: Note
+            
+        if isFiltering {
+            note = filteredNotes[indexPath.row]
+        } else {
+            if indexPath.section == 0 {
+                note = pinnedNotes[indexPath.row]
+            } else {
+                note = unpinnedNotes[indexPath.row]
+            }
+        }
+        
+        let pin = UIContextualAction(style: .normal, title: nil) { action, view, completion in
+            print("Pin Button Clicked")
+            
+            self.repository.updatePinned(of: note)
+            
+//            self.fetchRealm()
+            tableView.reloadData()
+        }
+        
+        let image = note.isPinned ? "pin.slash.fill" : "pin.fill"
+        pin.image = UIImage(systemName: image)
+        pin.backgroundColor = .systemOrange
+        
+        return UISwipeActionsConfiguration(actions: [pin])
     }
 }
 
