@@ -28,7 +28,11 @@ class WriteViewController: BaseViewController {
         super.viewDidLoad()
 
         print("selected note: \(note)")
-        if isExistingNote { showExistingNote() }
+        if isExistingNote {
+            showExistingNote()
+        } else {
+            writeView.textView.becomeFirstResponder()
+        }
     }
     
     override func setUI() {

@@ -11,7 +11,7 @@ class WriteView: BaseView {
     let textView: UITextView = {
         let view = UITextView()
         view.font = .boldSystemFont(ofSize: 15)
-        view.becomeFirstResponder()
+//        view.becomeFirstResponder()
         return view
     }()
     
