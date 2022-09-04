@@ -151,9 +151,16 @@ class NotesViewController: BaseViewController {
     }
 
     
-    func filterNotesForSearchText(searchText: String) {
-        filteredNotes = allDummyNotes.filter({ note in
-            return note.title.contains(searchText) || note.contents.contains(searchText)
+    func filterNotesForSearchText(with searchText: String) {
+        filteredNotes = allNotes.filter({ note in
+            let titleLowercased = note.title.lowercased()
+            
+            if let contents = note.contents {
+                let contentsLowercased = contents.lowercased()
+                return titleLowercased.contains(searchText) || contentsLowercased.contains(searchText)
+            } else {
+                return titleLowercased.contains(searchText)
+            }
         })
         
         notesView.tableView.reloadData()
@@ -293,8 +300,8 @@ extension NotesViewController: UISearchResultsUpdating {
             return
         }
         
-        searchText = text
-        filterNotesForSearchText(searchText: text)
+        searchText = text.lowercased()
+        filterNotesForSearchText(with: searchText)
     }
 }
 
