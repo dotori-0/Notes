@@ -15,14 +15,14 @@ class NotesViewController: BaseViewController {
     let notesView = NotesView()
     
     let repository = NotesRepository()
-    
-    var allDummyNotes = [NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
-                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
+//
+//    var allDummyNotes = [NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))"),
+//                    NotesModel(title: "타이틀\(Int.random(in: 1...5))", contents: "\(Int.random(in: 1...100))")]
     var allNotes: Results<Note>! {
         didSet {
             print("Notes Changed")
@@ -89,7 +89,9 @@ class NotesViewController: BaseViewController {
         
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
+        
         fetchRealm()
+        setTitle()
     }
     
     
@@ -106,7 +108,6 @@ class NotesViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        title = "1234개의 메모"
         
         guard navigationController != nil else {
             print("no navigation controller")
@@ -119,8 +120,24 @@ class NotesViewController: BaseViewController {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .systemGray6
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.title = "Zzz"
         
         notesView.addSubview(toolbar)
+    }
+    
+    func formatNumber(_ number: Int) -> String? {
+        let numberFomatter = NumberFormatter()
+        numberFomatter.numberStyle = .decimal
+        
+        return numberFomatter.string(for: number)
+    }
+    
+    func setTitle() {
+        if let formattedNotesCount = formatNumber(allNotes.count) {
+            title = "\(formattedNotesCount)개의 메모"
+        } else {
+            title = "메모"
+        }
     }
     
     
@@ -185,7 +202,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }()
         
         if isFiltering {
-            headerTitleLabel.text = "\(filteredNotes.count) 개 찾음"
+            guard let formattedFilterNotesCount = formatNumber(filteredNotes.count) else { return UIView() }
+            headerTitleLabel.text = "\(formattedFilterNotesCount)개 찾음"
         } else {
 //            headerTitleLabel.text = section == 0 ? "고정된 메모" : "메모"
             headerTitleLabel.text = "메모"
