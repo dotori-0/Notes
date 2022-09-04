@@ -78,6 +78,8 @@ class NotesViewController: BaseViewController {
 //        view.addSubview(notesView.toolBar)
 //        notesView.toolBar.delegate = self
         notesView.searchController.searchResultsUpdater = self
+        
+        print("Realm is located at:", repository.realm.configuration.fileURL!)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -118,6 +120,10 @@ class NotesViewController: BaseViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
         notesView.addSubview(toolbar)
+        
+        if !UserDefaultsHelper.standard.isExistingUser {
+            showWalkthroughPopUp()
+        }
     }
     
     func formatNumber(_ number: Int) -> String? {
@@ -144,6 +150,15 @@ class NotesViewController: BaseViewController {
     }
     
     
+    func showWalkthroughPopUp() {
+        UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.addSubview(notesView.walkthroughBackground)
+        
+        notesView.walkthroughBackground.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    
     override func setActions() {
         // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기
 //        let handler: () -> Void = { self.transition(to: WriteViewController()) }
@@ -159,14 +174,9 @@ class NotesViewController: BaseViewController {
     
     
     func fetchRealm() {
-//        print("💟")
         allNotes = repository.fetch()
-//        print("🍓")
         pinnedNotes = repository.fetchPinnedNotes()
-//        print("🍑", pinnedNotes)
-//        print("🍑", pinnedNotes.count)
         unpinnedNotes = repository.fetchUnpinnedNotes()
-//        print("🤍", unpinnedNotes)
     }
 
     
@@ -192,12 +202,10 @@ class NotesViewController: BaseViewController {
 
 extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        print(#function)
         return isFiltering ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        print(#function)
         let headerView = UIView()
         let headerTitleLabel: UILabel = {
             let label = UILabel()
@@ -231,7 +239,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        print(#function)
         if !isFiltering {
             if section == 0 {
                 guard pinnedNotes != nil else { return 0 }
@@ -247,7 +254,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(#function)
         if isFiltering {
             return foundNotes.count
         } else {
@@ -262,7 +268,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print(#function)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NotesTableViewCell.reuseIdentifier) as? NotesTableViewCell else {
             print("Cannot find NotesTableViewCell")
             return UITableViewCell()

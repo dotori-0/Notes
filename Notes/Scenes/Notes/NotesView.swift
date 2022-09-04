@@ -26,15 +26,46 @@ class NotesView: BaseView {
         return view
     }()
     
-//    @objc var writeButtonHandler: (() -> Void)?
-//
-//    let toolbar: UIToolbar = {
-//        let toolbar = UIToolbar()
-//        let spaceBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: NotesViewController.self, action: nil)
-//        let writeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: NotesViewController.self, action: #selector(getter: writeButtonHandler))
-//        toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
-//        return toolbar
-//    }()
+    let walkthroughBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.4)
+        return view
+    }()
+    
+    let walkthroughPopUp: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        view.layer.cornerRadius = 30
+        return view
+    }()
+    
+    let walkthroughLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.Strings.walkthrough
+        label.numberOfLines = 0
+//        label.font = .boldSystemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        return label
+    }()
+    
+    let okButton: UIButton = {
+       let button = UIButton()
+        button.layer.cornerRadius = 12
+        button.backgroundColor = .systemOrange
+        button.setTitle("확인", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
+        return button
+    }()
+    
+    //    @objc var writeButtonHandler: (() -> Void)?
+    //
+    //    let toolbar: UIToolbar = {
+    //        let toolbar = UIToolbar()
+    //        let spaceBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: NotesViewController.self, action: nil)
+    //        let writeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: NotesViewController.self, action: #selector(getter: writeButtonHandler))
+    //        toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
+    //        return toolbar
+    //    }()
     
     
     
@@ -53,6 +84,10 @@ class NotesView: BaseView {
         
         addSubview(tableView)
 //        addSubview(toolbar)
+        
+        if !UserDefaultsHelper.standard.isExistingUser {
+            setWalkthroughPopUp()
+        }
     }
     
     override func setConstraints() {
@@ -60,10 +95,44 @@ class NotesView: BaseView {
             make.edges.equalToSuperview()
         }
         
-//        toolbar.snp.makeConstraints { make in
-//            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
-////            make.height.equalTo(44)
-//        }
-//        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
+        //        toolbar.snp.makeConstraints { make in
+        //            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
+        ////            make.height.equalTo(44)
+        //        }
+        //        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
+    }
+    
+    func setWalkthroughPopUp() {
+        print(#function)
+        [walkthroughLabel, okButton].forEach {
+            walkthroughPopUp.addSubview($0)
+        }
+        walkthroughBackground.addSubview(walkthroughPopUp)
+        
+        walkthroughLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-40)
+            make.width.equalTo(240)
+        }
+        
+        okButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.85)
+            make.height.equalTo(okButton.snp.width).multipliedBy(0.2)
+            make.bottom.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+        }
+        
+        walkthroughPopUp.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalTo(walkthroughPopUp.snp.width)
+            make.center.equalToSuperview()
+        }
+        
+        okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
+    }
+    
+    @objc func okButtonClicked() {
+        walkthroughBackground.removeFromSuperview()
+        UserDefaultsHelper.standard.isExistingUser = true
     }
 }

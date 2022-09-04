@@ -32,6 +32,8 @@
 		0AE0954228C2462D00752327 /* NotesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954128C2462D00752327 /* NotesRepository.swift */; };
 		0AE0954528C4EE6C00752327 /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954428C4EE6B00752327 /* Alert+Extension.swift */; };
 		0AE0954828C50D9800752327 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0AE0954728C50D9800752327 /* IQKeyboardManagerSwift */; };
+		0AE0954B28C516D600752327 /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954A28C516D500752327 /* UserDefaultsHelper.swift */; };
+		0AE0954E28C51CEE00752327 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954D28C51CEE00752327 /* Strings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,8 @@
 		0AE0953A28C242F800752327 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		0AE0954128C2462D00752327 /* NotesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesRepository.swift; sourceTree = "<group>"; };
 		0AE0954428C4EE6B00752327 /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
+		0AE0954A28C516D500752327 /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
+		0AE0954D28C51CEE00752327 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,9 +135,11 @@
 		0AE0951628C0953D00752327 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				0AE0954C28C51CE400752327 /* Constants */,
 				0AE0952F28C20A4800752327 /* Extensions */,
 				0AE0952428C0C81800752327 /* Protocols */,
 				0AE0951828C0956D00752327 /* Base */,
+				0AE0954A28C516D500752327 /* UserDefaultsHelper.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -182,6 +188,14 @@
 				0AE0954128C2462D00752327 /* NotesRepository.swift */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		0AE0954C28C51CE400752327 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				0AE0954D28C51CEE00752327 /* Strings.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +282,7 @@
 			files = (
 				0AE0952628C0C82300752327 /* ReusableView.swift in Sources */,
 				0AE0952328C0C7C400752327 /* BaseTableViewCell.swift in Sources */,
+				0AE0954E28C51CEE00752327 /* Strings.swift in Sources */,
 				0AE0951E28C0960100752327 /* NotesView.swift in Sources */,
 				0AE0951A28C0957700752327 /* BaseViewController.swift in Sources */,
 				0AE0953128C20A8B00752327 /* String+Extension.swift in Sources */,
@@ -275,6 +290,7 @@
 				0AE0953628C2174200752327 /* WriteView.swift in Sources */,
 				0AE0952A28C11A4700752327 /* NotesModel.swift in Sources */,
 				0AE0951528C0953700752327 /* NotesViewController.swift in Sources */,
+				0AE0954B28C516D600752327 /* UserDefaultsHelper.swift in Sources */,
 				0AE0953828C21A5500752327 /* Transition+Extension.swift in Sources */,
 				0AE094F928BFCCFB00752327 /* ViewController.swift in Sources */,
 				0AE0951C28C095B800752327 /* BaseView.swift in Sources */,
