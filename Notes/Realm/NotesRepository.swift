@@ -25,7 +25,7 @@ struct NotesRepository: RealmProtocol {
     let realm = try! Realm()
     
     func fetch() -> Results<Note> {
-        return realm.objects(Note.self).sorted(byKeyPath: "editDate", ascending: false)
+        return realm.objects(Note.self).sorted(byKeyPath: RealmKey.editDate, ascending: false)
     }
     
     func fetchPinnedNotes() -> Results<Note> {

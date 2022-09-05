@@ -53,15 +53,15 @@ final class WriteViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         navigationItem.largeTitleDisplayMode = .never
-        navigationController?.navigationBar.topItem?.title = isFromSearch ? "검색" : "메모"
+        navigationController?.navigationBar.topItem?.title = isFromSearch ? Notice.search : Notice.notes
     }
     
     private func hideAndShowDoneButton(isEditing: Bool) {
-        let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
+        let shareButton = UIBarButtonItem(image: UIImage(systemName: SymbolName.share), style: .plain, target: self, action: #selector(shareButtonClicked))
         barButtons = [shareButton]
         
         if isEditing {
-            let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(doneButtonClicked))
+            let doneButton = UIBarButtonItem(title: Notice.done, style: .done, target: self, action: #selector(doneButtonClicked))
             barButtons.insert(doneButton, at: 0)
         }
 

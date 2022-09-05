@@ -11,7 +11,7 @@ import RealmSwift
 
 class Note: Object {
     @Persisted(primaryKey: true) var objectId: ObjectId
-    @Persisted var writeDate = Date()  // 작성일(필수)
+    @Persisted var writeDate = Date()  // 작성일(필수)(추후 develop 위해 미리 구현)
     @Persisted var editDate = Date()   // 수정일(필수)
     @Persisted var title: String       // 제목(필수)
     @Persisted var contents: String?   // 내용(추가 텍스트)(옵션)

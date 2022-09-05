@@ -103,7 +103,7 @@ final class NotesViewController: BaseViewController {
         super.setUI()
         
         guard navigationController != nil else {
-            print("no navigation controller")
+            print("No navigation controller")
             return
         }
 //        navigationController?.navigationBar.prefersLargeTitles = true  // viewWillAppear로 옮김(WriteViewController에 false로 지정되어 있어 WriteViewController로 갔다가 돌아 오면 네비게이션 타이틀이 작아져 있음)
@@ -152,9 +152,9 @@ final class NotesViewController: BaseViewController {
     
     private func setTitle() {
         if let formattedNotesCount = formatNumber(allNotes.count) {
-            title = "\(formattedNotesCount)개의 메모"
+            title = Notice.numberOfNotes(count: formattedNotesCount)
         } else {
-            title = "메모"
+            title = Notice.notes
         }
     }
     
@@ -200,16 +200,16 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         
         if isFiltering {
             guard let formattedFilterNotesCount = formatNumber(foundNotes.count) else { return UIView() }
-            headerTitleLabel.text = "\(formattedFilterNotesCount)개 찾음"
+            headerTitleLabel.text = Notice.numberOfFoundNotes(count: formattedFilterNotesCount)
         } else {
-            if section == 0 {
+            if section == Section.pinnedNotes {
                 guard pinnedNotes != nil else { return nil }
                 if pinnedNotes.isEmpty { return nil }
-                headerTitleLabel.text = "고정된 메모"
+                headerTitleLabel.text = Notice.pinnedNotes
             } else {
                 guard unpinnedNotes != nil else { return nil }
                 if unpinnedNotes.isEmpty { return nil }
-                headerTitleLabel.text = "메모"
+                headerTitleLabel.text = Notice.notes
             }
         }
         
@@ -225,7 +225,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if !isFiltering {
-            if section == 0 {
+            if section == Section.pinnedNotes {
                 guard pinnedNotes != nil else { return 0 }
                 if pinnedNotes.isEmpty { return 0 }
             } else {
@@ -241,7 +241,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         if isFiltering {
             return foundNotes.count
         } else {
-            if section == 0 {
+            if section == Section.pinnedNotes {
                 guard pinnedNotes != nil else { return 0 }
                 return pinnedNotes.count
             } else {
@@ -273,18 +273,18 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
   
             // "새로운 메모" 및 "추가 텍스트 없음"에서 텍스트 컬러 변경이 일어나지 않도록
             if filteredNoteTitleTrimmed.isEmpty {
-                cell.titleLabel.text = "새로운 메모"
+                cell.titleLabel.text = Notice.newNote
             } else {
                 cell.titleLabel.attributedText = filteredNoteTitleTrimmed.addAttribute(to: searchText)
             }
 
             if filteredNoteContentsTrimmed.isEmpty {
-                cell.contentsLabel.text = "추가 텍스트 없음"
+                cell.contentsLabel.text = Notice.noAdditionalTexts
             } else {
                 cell.contentsLabel.attributedText = filteredNoteContentsTrimmed.addAttribute(to: searchText)
             }
         } else {
-            if indexPath.section == 0 {
+            if indexPath.section == Section.pinnedNotes {
                 guard !pinnedNotes.isEmpty else { return UITableViewCell() }
                 note = pinnedNotes[indexPath.row]
             } else {
@@ -295,8 +295,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             let titleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
             guard let contentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else { return UITableViewCell() }
             
-            let titleLabelText = titleTrimmed.isEmpty ? "새로운 메모" : titleTrimmed
-            let contentsLabelText = contentsTrimmed.isEmpty ? "추가 텍스트 없음" : contentsTrimmed
+            let titleLabelText = titleTrimmed.isEmpty ? Notice.newNote : titleTrimmed
+            let contentsLabelText = contentsTrimmed.isEmpty ? Notice.noAdditionalTexts : contentsTrimmed
             // 내용으로 엔터만 쳤을 경우 note.contents가 Optional("\n\n\n\n\n\n\n")이기 때문에
             
             cell.titleLabel.text = titleLabelText
@@ -304,7 +304,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko-KR")
+        formatter.locale = Locale(identifier: LocalizationSettings.korea)
         let calendar = Calendar.current
         
         let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
@@ -314,11 +314,12 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         let weekOfToday = currentDateComponent.weekOfYear
         
         if calendar.isDateInToday(note.editDate) {
-            formatter.dateFormat = "a hh:mm"
+//            formatter.dateFormat = "a hh:mm"
+            formatter.dateFormat = DateFormat.today
         } else if weekOfEditDate == weekOfToday {
-            formatter.dateFormat = "EEEE"
+            formatter.dateFormat = DateFormat.thisWeek
         } else {
-            formatter.dateFormat = "yyyy. MM. dd a hh:mm"
+            formatter.dateFormat = DateFormat.other
         }
         
         cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
@@ -334,7 +335,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             vc.note = foundNotes[indexPath.row]
             vc.isFromSearch = true
         } else {
-            if indexPath.section == 0 {
+            if indexPath.section == Section.pinnedNotes {
                 vc.note = pinnedNotes[indexPath.row]
             } else {
                 vc.note = unpinnedNotes[indexPath.row]
@@ -350,7 +351,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         if isFiltering {
             note = foundNotes[indexPath.row]
         } else {
-            if indexPath.section == 0 {
+            if indexPath.section == Section.pinnedNotes {
                 note = pinnedNotes[indexPath.row]
             } else {
                 note = unpinnedNotes[indexPath.row]
@@ -358,8 +359,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let pin = UIContextualAction(style: .normal, title: nil) { action, view, completion in
-            if !note.isPinned && self.pinnedNotes.count == 5 {
-                self.showAlert(title: "고정 개수 제한 안내", message: "고정 메모 개수는 5개로 제한됩니다!")
+            if !note.isPinned && self.pinnedNotes.count == PinnedNotes.max {
+                self.showAlert(title: Notice.pinnedNotesLimitTitle, message: Notice.pinnedNotesLimitMessage)
             } else {
                 self.repository.updatePinned(of: note)
             }
@@ -367,7 +368,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.reloadData()
         }
         
-        let image = note.isPinned ? "pin.slash.fill" : "pin.fill"
+        let image = note.isPinned ? SymbolName.unpin : SymbolName.pin
         pin.image = UIImage(systemName: image)
         pin.backgroundColor = .systemOrange
         
@@ -380,7 +381,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         if isFiltering {
             note = foundNotes[indexPath.row]
         } else {
-            if indexPath.section == 0 {
+            if indexPath.section == Section.pinnedNotes {
                 note = pinnedNotes[indexPath.row]
             } else {
                 note = unpinnedNotes[indexPath.row]
@@ -388,8 +389,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completion in
-            self.showAlert(title: "정말 삭제하실 건가요?",
-                           message: "삭제된 메모는 복구가 불가합니다!",
+            self.showAlert(title: Notice.deleteWarningTitle,
+                           message: Notice.deleteWarningMessage,
                            style: .destructive,
                            allowsCancel: true) { _ in
                 self.repository.deleteNote(note)
@@ -399,7 +400,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        delete.image = UIImage(systemName: "trash.fill")
+        delete.image = UIImage(systemName: SymbolName.trash)
         delete.backgroundColor = .systemRed
         
         return UISwipeActionsConfiguration(actions: [delete])

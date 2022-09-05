@@ -13,8 +13,8 @@ final class NotesView: BaseView {
     let searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         // By initializing UISearchController with a nil value for searchResultsController, you’re telling the search controller that you want to use the same view you’re searching to display the results.
-        controller.searchBar.placeholder = "검색"
-        controller.searchBar.setValue("취소", forKey: "cancelButtonText")
+        controller.searchBar.placeholder = Notice.search
+        controller.searchBar.setValue(Notice.cancel, forKey: SearchBarKey.cancelButtonText)
         controller.searchBar.becomeFirstResponder()
         return controller
     }()
@@ -40,7 +40,7 @@ final class NotesView: BaseView {
     
     private let walkthroughLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.Strings.walkthrough
+        label.text = Notice.walkthrough
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 24, weight: .semibold)
         return label
@@ -50,7 +50,7 @@ final class NotesView: BaseView {
        let button = UIButton()
         button.layer.cornerRadius = 12
         button.backgroundColor = .systemOrange
-        button.setTitle("확인", for: .normal)
+        button.setTitle(Notice.ok, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
         return button
     }()

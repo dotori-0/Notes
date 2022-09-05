@@ -32,7 +32,15 @@
 		0AE0954528C4EE6C00752327 /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954428C4EE6B00752327 /* Alert+Extension.swift */; };
 		0AE0954828C50D9800752327 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0AE0954728C50D9800752327 /* IQKeyboardManagerSwift */; };
 		0AE0954B28C516D600752327 /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954A28C516D500752327 /* UserDefaultsHelper.swift */; };
-		0AE0954E28C51CEE00752327 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0954D28C51CEE00752327 /* Strings.swift */; };
+		0AE0955128C5CE1400752327 /* RealmKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955028C5CE1400752327 /* RealmKey.swift */; };
+		0AE0955328C5CE9E00752327 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955228C5CE9D00752327 /* Notice.swift */; };
+		0AE0955528C5CEF400752327 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955428C5CEF400752327 /* Color.swift */; };
+		0AE0955928C5D0F000752327 /* LocalizationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955828C5D0F000752327 /* LocalizationSettings.swift */; };
+		0AE0955B28C5D1AE00752327 /* SymbolName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955A28C5D1AE00752327 /* SymbolName.swift */; };
+		0AE0955D28C5D4B600752327 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955C28C5D4B500752327 /* DateFormat.swift */; };
+		0AE0955F28C5D63200752327 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0955E28C5D63200752327 /* Section.swift */; };
+		0AE0956128C5D6CE00752327 /* Limitations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0956028C5D6CE00752327 /* Limitations.swift */; };
+		0AE0956328C5D78A00752327 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE0956228C5D78A00752327 /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +67,15 @@
 		0AE0954128C2462D00752327 /* NotesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesRepository.swift; sourceTree = "<group>"; };
 		0AE0954428C4EE6B00752327 /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
 		0AE0954A28C516D500752327 /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
-		0AE0954D28C51CEE00752327 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		0AE0955028C5CE1400752327 /* RealmKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmKey.swift; sourceTree = "<group>"; };
+		0AE0955228C5CE9D00752327 /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
+		0AE0955428C5CEF400752327 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		0AE0955828C5D0F000752327 /* LocalizationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationSettings.swift; sourceTree = "<group>"; };
+		0AE0955A28C5D1AE00752327 /* SymbolName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolName.swift; sourceTree = "<group>"; };
+		0AE0955C28C5D4B500752327 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		0AE0955E28C5D63200752327 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		0AE0956028C5D6CE00752327 /* Limitations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Limitations.swift; sourceTree = "<group>"; };
+		0AE0956228C5D78A00752327 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,7 +206,15 @@
 		0AE0954C28C51CE400752327 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				0AE0954D28C51CEE00752327 /* Strings.swift */,
+				0AE0955028C5CE1400752327 /* RealmKey.swift */,
+				0AE0956228C5D78A00752327 /* Keys.swift */,
+				0AE0955228C5CE9D00752327 /* Notice.swift */,
+				0AE0955428C5CEF400752327 /* Color.swift */,
+				0AE0955828C5D0F000752327 /* LocalizationSettings.swift */,
+				0AE0955A28C5D1AE00752327 /* SymbolName.swift */,
+				0AE0955C28C5D4B500752327 /* DateFormat.swift */,
+				0AE0955E28C5D63200752327 /* Section.swift */,
+				0AE0956028C5D6CE00752327 /* Limitations.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -277,24 +301,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AE0955F28C5D63200752327 /* Section.swift in Sources */,
 				0AE0952628C0C82300752327 /* ReusableView.swift in Sources */,
 				0AE0952328C0C7C400752327 /* BaseTableViewCell.swift in Sources */,
-				0AE0954E28C51CEE00752327 /* Strings.swift in Sources */,
+				0AE0955328C5CE9E00752327 /* Notice.swift in Sources */,
 				0AE0951E28C0960100752327 /* NotesView.swift in Sources */,
 				0AE0951A28C0957700752327 /* BaseViewController.swift in Sources */,
 				0AE0953128C20A8B00752327 /* String+Extension.swift in Sources */,
+				0AE0956328C5D78A00752327 /* Keys.swift in Sources */,
 				0AE0953428C2171600752327 /* WriteViewController.swift in Sources */,
+				0AE0955128C5CE1400752327 /* RealmKey.swift in Sources */,
 				0AE0953628C2174200752327 /* WriteView.swift in Sources */,
+				0AE0955B28C5D1AE00752327 /* SymbolName.swift in Sources */,
 				0AE0952A28C11A4700752327 /* NotesModel.swift in Sources */,
 				0AE0951528C0953700752327 /* NotesViewController.swift in Sources */,
 				0AE0954B28C516D600752327 /* UserDefaultsHelper.swift in Sources */,
+				0AE0955528C5CEF400752327 /* Color.swift in Sources */,
 				0AE0953828C21A5500752327 /* Transition+Extension.swift in Sources */,
+				0AE0955928C5D0F000752327 /* LocalizationSettings.swift in Sources */,
 				0AE0951C28C095B800752327 /* BaseView.swift in Sources */,
 				0AE0952828C0C8A100752327 /* NotesTableViewCell.swift in Sources */,
+				0AE0956128C5D6CE00752327 /* Limitations.swift in Sources */,
 				0AE0954228C2462D00752327 /* NotesRepository.swift in Sources */,
 				0AE094F528BFCCFB00752327 /* AppDelegate.swift in Sources */,
 				0AE094F728BFCCFB00752327 /* SceneDelegate.swift in Sources */,
 				0AE0954528C4EE6C00752327 /* Alert+Extension.swift in Sources */,
+				0AE0955D28C5D4B600752327 /* DateFormat.swift in Sources */,
 				0AE0953B28C242F800752327 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

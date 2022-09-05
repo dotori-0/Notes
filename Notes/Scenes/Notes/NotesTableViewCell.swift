@@ -27,7 +27,6 @@ final class NotesTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
-//        label.numberOfLines = 1
         return label
     }()
     
