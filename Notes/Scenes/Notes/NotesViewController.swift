@@ -6,36 +6,36 @@
 //
 
 import UIKit
+
 import RealmSwift
 
-class NotesViewController: BaseViewController {
-    
+final class NotesViewController: BaseViewController {
     // MARK: - Properties
     
-    let notesView = NotesView()
-    let repository = NotesRepository()
+    private let notesView = NotesView()
+    private let repository = NotesRepository()
 
-    var allNotes: Results<Note>! {
+    private var allNotes: Results<Note>! {
         didSet {
             print("Notes Changed")
             notesView.tableView.reloadData()
         }
     }
-    var pinnedNotes: Results<Note>!
-    var unpinnedNotes: Results<Note>!
-    var foundNotes: Results<Note>!
+    private var pinnedNotes: Results<Note>!
+    private var unpinnedNotes: Results<Note>!
+    private var foundNotes: Results<Note>!
     
-    var isSearchBarEmpty: Bool {
+    private var isSearchBarEmpty: Bool {
         return notesView.searchController.searchBar.text?.isEmpty ?? true
     }
     
-    var isFiltering: Bool {
+    private var isFiltering: Bool {
         return notesView.searchController.isActive && !isSearchBarEmpty
     }
     
-    var searchText = ""
+    private var searchText = ""
     
-    let toolbar: UIToolbar = {
+    private let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
         let spaceBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: NotesViewController.self, action: nil)
         let writeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(writeButtonClicked))
@@ -43,15 +43,12 @@ class NotesViewController: BaseViewController {
         // Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+[Notes.NotesViewController writeButtonClicked]: unrecognized selector sent to class 0x10253f048'
         toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
         toolbar.isTranslucent = false
-//        toolbar.barTintColor = .systemGray6
 //        toolbar.clipsToBounds = true  // separator 없애기 위해 추가했지만 툴바 높이 44를 제외한 인디케이터 영역을 채우지 못함
         
         let appearance = UIToolbarAppearance()
         appearance.configureWithOpaqueBackground()
-//        appearance.backgroundColor = .systemGray6
         
         if #available(iOS 15.0, *) {
-//            toolbar.scrollEdgeAppearance = appearance
             toolbar.standardAppearance = appearance
         }
         
@@ -64,7 +61,6 @@ class NotesViewController: BaseViewController {
     override func loadView() {
         view = notesView
     }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,8 +68,6 @@ class NotesViewController: BaseViewController {
         notesView.tableView.dataSource = self
         notesView.tableView.delegate = self
         
-//        view.addSubview(notesView.toolBar)
-//        notesView.toolBar.delegate = self
         notesView.searchController.searchResultsUpdater = self
         
         print("Realm is located at:", repository.realm.configuration.fileURL!)
@@ -81,17 +75,13 @@ class NotesViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        notesView.tableView.reloadData()
         
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        print(#function)
-        
         fetchRealm()
         setTitle()
     }
-   
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -108,7 +98,6 @@ class NotesViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
 //        navigationController?.navigationBar.prefersLargeTitles = false  // prefersLargeTitles = false는 뷰 전환 후에도 Large Title이 잠시 남아 있는 문제 있음
     }
-
 
     override func setUI() {
         super.setUI()
@@ -134,22 +123,6 @@ class NotesViewController: BaseViewController {
         notesView.tableView.keyboardDismissMode = .onDrag
     }
     
-    func formatNumber(_ number: Int) -> String? {
-        let numberFomatter = NumberFormatter()
-        numberFomatter.numberStyle = .decimal
-        
-        return numberFomatter.string(for: number)
-    }
-    
-    func setTitle() {
-        if let formattedNotesCount = formatNumber(allNotes.count) {
-            title = "\(formattedNotesCount)개의 메모"
-        } else {
-            title = "메모"
-        }
-    }
-    
-    
     override func setConstraints() {
         toolbar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(notesView.safeAreaLayoutGuide)
@@ -162,16 +135,6 @@ class NotesViewController: BaseViewController {
         }  // NotesView에서 레이아웃 잡은 후 NotesViewController에서 updateConstraints 하면 Updated constraint could not find existing matching constraint to update 런타임 에러
     }
     
-    
-    func showWalkthroughPopUp() {
-        UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.addSubview(notesView.walkthroughBackground)
-        
-        notesView.walkthroughBackground.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    
     override func setActions() {
         // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기
 //        let handler: () -> Void = { self.transition(to: WriteViewController()) }
@@ -180,22 +143,42 @@ class NotesViewController: BaseViewController {
         // Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+[Notes.NotesViewController writeButtonHandler]: unrecognized selector sent to class 0x104417008'
     }
     
+    private func formatNumber(_ number: Int) -> String? {
+        let numberFomatter = NumberFormatter()
+        numberFomatter.numberStyle = .decimal
         
-    @objc func writeButtonClicked() {
+        return numberFomatter.string(for: number)
+    }
+    
+    private func setTitle() {
+        if let formattedNotesCount = formatNumber(allNotes.count) {
+            title = "\(formattedNotesCount)개의 메모"
+        } else {
+            title = "메모"
+        }
+    }
+    
+    private func showWalkthroughPopUp() {
+        UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.addSubview(notesView.walkthroughBackground)
+        
+        notesView.walkthroughBackground.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+        
+    @objc private func writeButtonClicked() {
         transition(to: WriteViewController())
     }
     
-    
-    func fetchRealm() {
+    private func fetchRealm() {
         print(#function)
         allNotes = repository.fetch()
         pinnedNotes = repository.fetchPinnedNotes()
         unpinnedNotes = repository.fetchUnpinnedNotes()
         notesView.tableView.reloadData()
     }
-
     
-    func findNotes(with searchText: String) {
+    private func findNotes(with searchText: String) {
         foundNotes = repository.findNotes(with: searchText)
         notesView.tableView.reloadData()
     }
@@ -274,11 +257,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         
-//        cell.tag = indexPath.row
-
-        
         var note: Note
-
            
         if isFiltering {
             guard !foundNotes.isEmpty else { return UITableViewCell() }
@@ -324,7 +303,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             cell.contentsLabel.text = contentsLabelText
         }
         
-        
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko-KR")
         let calendar = Calendar.current
@@ -344,7 +322,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
-        
 
         return cell
     }
@@ -381,10 +358,8 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let pin = UIContextualAction(style: .normal, title: nil) { action, view, completion in
-            print("Pin Button Clicked")
-            
             if !note.isPinned && self.pinnedNotes.count == 5 {
-                self.showAlert(title: "고정 개수 제한 안내", message: "메모 고정 개수는 5개로 제한됩니다!")
+                self.showAlert(title: "고정 개수 제한 안내", message: "고정 메모 개수는 5개로 제한됩니다!")
             } else {
                 self.repository.updatePinned(of: note)
             }
@@ -413,8 +388,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completion in
-            print("Delete Button Clicked")
-            
             self.showAlert(title: "정말 삭제하실 건가요?",
                            message: "삭제된 메모는 복구가 불가합니다!",
                            style: .destructive,

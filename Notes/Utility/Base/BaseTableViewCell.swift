@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 
 class BaseTableViewCell: UITableViewCell {
-    
     // MARK: - Functions
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -27,5 +26,4 @@ class BaseTableViewCell: UITableViewCell {
     func setUI() { }
     
     func setConstraints() { }
-    
 }

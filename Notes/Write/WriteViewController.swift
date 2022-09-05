@@ -7,19 +7,18 @@
 
 import UIKit
 
-class WriteViewController: BaseViewController {
-    
+final class WriteViewController: BaseViewController {
     // MARK: - Properties
     
-    let writeView = WriteView()
-    let repository = NotesRepository()
+    private let writeView = WriteView()
+    private let repository = NotesRepository()
     
     var isFromSearch = false
     var isExistingNote = false
-    var deletedNote = false
+    private var deletedNote = false
     var note: Note?
     
-    var barButtons: [UIBarButtonItem] = []
+    private var barButtons: [UIBarButtonItem] = []
     
     
     // MARK: - Functions
@@ -57,7 +56,7 @@ class WriteViewController: BaseViewController {
         navigationController?.navigationBar.topItem?.title = isFromSearch ? "검색" : "메모"
     }
     
-    func hideAndShowDoneButton(isEditing: Bool) {
+    private func hideAndShowDoneButton(isEditing: Bool) {
         let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
         barButtons = [shareButton]
         
@@ -69,7 +68,7 @@ class WriteViewController: BaseViewController {
         navigationItem.rightBarButtonItems = barButtons
     }
     
-    func showExistingNote() {
+    private func showExistingNote() {
         writeView.textView.text = note?.title
         
         if let contents = note?.contents {
@@ -77,22 +76,22 @@ class WriteViewController: BaseViewController {
         }
     }
     
-    @objc func shareButtonClicked() {
+    @objc private func shareButtonClicked() {
         showActivityViewController()
     }
     
-    func showActivityViewController() {
+    private func showActivityViewController() {
         let vc = UIActivityViewController(activityItems: [writeView.textView.text], applicationActivities: [])
         present(vc, animated: true)
     }
     
-    @objc func doneButtonClicked() {
+    @objc private func doneButtonClicked() {
         updateOrSaveNoteToRealm()
         isExistingNote = true
         writeView.endEditing(true)
     }
     
-    func updateOrSaveNoteToRealm() {
+    private func updateOrSaveNoteToRealm() {
         if isExistingNote {
             checkChangesAndUpdateNoteToRealm()
         } else {
@@ -100,7 +99,7 @@ class WriteViewController: BaseViewController {
         }
     }
     
-    func setNote() -> Note? {
+    private func setNote() -> Note? {
         guard let text = writeView.textView.text else {
             print("Cannot find text in Text View")
             return nil
@@ -108,7 +107,6 @@ class WriteViewController: BaseViewController {
         
         // 리턴키를 기준으로 텍스트 분리
         let writtenTextsArraySeparatedByNewLines = writeView.textView.text.components(separatedBy: .newlines)
-        print("💛", writtenTextsArraySeparatedByNewLines)
 
         // 분리된 배열의 첫 번째 요소
         guard let firstElementOfWrittenTextsArraySeparatedByNewLines = writtenTextsArraySeparatedByNewLines.first else {
@@ -120,8 +118,6 @@ class WriteViewController: BaseViewController {
         if writtenTextsArraySeparatedByNewLines.count == 1 && firstElementOfWrittenTextsArraySeparatedByNewLines.isEmpty {
             return nil
         }
-        print("💚 writtenTextsArraySeparatedByNewLines: \(writtenTextsArraySeparatedByNewLines)")
-        
         
         // 실제로 작성하는 텍스트와 그 후의 리턴 키를 기준으로 타이틀을 분리
         var realTextsArray: [String] = []
@@ -134,24 +130,19 @@ class WriteViewController: BaseViewController {
         }
         
         // 실제 텍스트가 아예 없을 시 저장되지 않도록
-        guard let firstRealText = realTextsArray.first else {
-            print("No real text at all")
+        guard let firstActualText = realTextsArray.first else {
+            print("No actual texts at all")
             return nil
         }
         
-        print("💙 firstRealText: \(firstRealText)")
-        let writtenTextsArraySeparatedByFirstRealText = writeView.textView.text.components(separatedBy: firstRealText)
-        print("💜", writtenTextsArraySeparatedByFirstRealText)
+        let writtenTextsArraySeparatedByFirstRealText = writeView.textView.text.components(separatedBy: firstActualText)
         
         guard let whiteSpacesAndNewLinesBeforeTheFirstRealText = writtenTextsArraySeparatedByFirstRealText.first else {
             print("Cannot find whiteSpacesAndNewLinesBeforeTheFirstRealText")
             return nil
         }
         
-        let title = "\(whiteSpacesAndNewLinesBeforeTheFirstRealText)\(firstRealText)"
-        
-
-        print("text.hasPrefix(title): \(text.hasPrefix(title))")
+        let title = "\(whiteSpacesAndNewLinesBeforeTheFirstRealText)\(firstActualText)"
         
         let contentsSubsequence = text.dropFirst(title.count)  // Type: String.SubSequence
         let contents = String(contentsSubsequence)             // Non-optional
@@ -161,13 +152,13 @@ class WriteViewController: BaseViewController {
         return note
     }
     
-    func saveNoteToRealm() {
+    private func saveNoteToRealm() {
         guard let note = setNote() else { return }
         repository.writeNote(note)
         self.note = note
     }
     
-    func checkChangesAndUpdateNoteToRealm() {
+    private func checkChangesAndUpdateNoteToRealm() {
         guard let editedNote = setNote() else {
             if let originalNote = note {
                 repository.deleteNote(id: originalNote.objectId)
@@ -176,13 +167,10 @@ class WriteViewController: BaseViewController {
             }
             return
         }
-        print("🌲", editedNote)
         
         guard let originalNote = note else { return }
-        print("🍁", originalNote)
         
         if originalNote.title != editedNote.title || originalNote.contents != editedNote.contents  {
-            print("달라~~~~~")
             repository.updateNote(from: originalNote, to: editedNote)
         }
     }

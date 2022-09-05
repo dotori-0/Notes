@@ -7,7 +7,7 @@
 
 import Foundation
 
-class UserDefaultsHelper {
+final class UserDefaultsHelper {
     private init() { }
     
     static let standard = UserDefaultsHelper()

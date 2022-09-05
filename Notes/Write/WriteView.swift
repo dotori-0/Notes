@@ -7,12 +7,16 @@
 
 import UIKit
 
-class WriteView: BaseView {
+final class WriteView: BaseView {
+    // MARK: - Property
     let textView: UITextView = {
         let view = UITextView()
         view.font = .boldSystemFont(ofSize: 15)
         return view
     }()
+    
+    
+    // MARK: - Functions
     
     override init(frame: CGRect) {
         super.init(frame: frame)

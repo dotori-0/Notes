@@ -7,8 +7,7 @@
 
 import UIKit
 
-class NotesView: BaseView {
-    
+final class NotesView: BaseView {
     // MARK: - Properties
     
     let searchController: UISearchController = {
@@ -32,14 +31,14 @@ class NotesView: BaseView {
         return view
     }()
     
-    let walkthroughPopUp: UIView = {
+    private let walkthroughPopUp: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 30
         return view
     }()
     
-    let walkthroughLabel: UILabel = {
+    private let walkthroughLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.Strings.walkthrough
         label.numberOfLines = 0
@@ -47,7 +46,7 @@ class NotesView: BaseView {
         return label
     }()
     
-    let okButton: UIButton = {
+    private let okButton: UIButton = {
        let button = UIButton()
         button.layer.cornerRadius = 12
         button.backgroundColor = .systemOrange
@@ -56,7 +55,8 @@ class NotesView: BaseView {
         return button
     }()
     
-    //    @objc var writeButtonHandler: (() -> Void)?
+    // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기 시도
+    //    @objc private var writeButtonHandler: (() -> Void)?
     //
     //    let toolbar: UIToolbar = {
     //        let toolbar = UIToolbar()
@@ -65,7 +65,6 @@ class NotesView: BaseView {
     //        toolbar.setItems([spaceBarButtonItem, writeBarButtonItem], animated: true)
     //        return toolbar
     //    }()
-    
     
     
     // MARK: - Functions
@@ -95,13 +94,14 @@ class NotesView: BaseView {
 //            make.edges.equalTo(safeAreaLayoutGuide)
 //        }
 //
+        // NotesView에 toolbar 선언 후 handler를 뷰컨으로부터 bar button item의 action으로 넘기기 시도
 //        toolbar.snp.makeConstraints { make in
 //            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
 //        }
 //        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
     }
     
-    func setWalkthroughPopUp() {
+    private func setWalkthroughPopUp() {
         [walkthroughLabel, okButton].forEach {
             walkthroughPopUp.addSubview($0)
         }
@@ -129,7 +129,7 @@ class NotesView: BaseView {
         okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
     }
     
-    @objc func okButtonClicked() {
+    @objc private func okButtonClicked() {
         walkthroughBackground.removeFromSuperview()
         UserDefaultsHelper.standard.isExistingUser = true
     }
