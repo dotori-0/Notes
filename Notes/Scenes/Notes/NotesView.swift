@@ -43,7 +43,6 @@ class NotesView: BaseView {
         let label = UILabel()
         label.text = Constants.Strings.walkthrough
         label.numberOfLines = 0
-//        label.font = .boldSystemFont(ofSize: 24)
         label.font = .systemFont(ofSize: 24, weight: .semibold)
         return label
     }()
@@ -91,19 +90,18 @@ class NotesView: BaseView {
     }
     
     override func setConstraints() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        //        toolbar.snp.makeConstraints { make in
-        //            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
-        ////            make.height.equalTo(44)
-        //        }
-        //        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
+        // NotesView에서 레이아웃 잡은 후 NotesViewController에서 updateConstraints 하면 Updated constraint could not find existing matching constraint to update 런타임 에러
+//        tableView.snp.makeConstraints { make in
+//            make.edges.equalTo(safeAreaLayoutGuide)
+//        }
+//
+//        toolbar.snp.makeConstraints { make in
+//            make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
+//        }
+//        toolbar.updateConstraintsIfNeeded()  // 실행하면 LayoutConstraints 오류가 2개에서 1개로 줄어드는 이유? 오류를 없앨 수 있는 방법?
     }
     
     func setWalkthroughPopUp() {
-        print(#function)
         [walkthroughLabel, okButton].forEach {
             walkthroughPopUp.addSubview($0)
         }

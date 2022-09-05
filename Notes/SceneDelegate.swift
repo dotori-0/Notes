@@ -19,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
+        window?.tintColor = .systemOrange
+        
         let notesViewController = NotesViewController()
         let nav = UINavigationController(rootViewController: notesViewController)
         window?.rootViewController = nav

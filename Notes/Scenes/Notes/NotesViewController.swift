@@ -130,6 +130,8 @@ class NotesViewController: BaseViewController {
         if !UserDefaultsHelper.standard.isExistingUser {
             showWalkthroughPopUp()
         }
+        
+        notesView.tableView.keyboardDismissMode = .onDrag
     }
     
     func formatNumber(_ number: Int) -> String? {
@@ -153,6 +155,11 @@ class NotesViewController: BaseViewController {
             make.leading.trailing.bottom.equalTo(notesView.safeAreaLayoutGuide)
         }
         toolbar.updateConstraintsIfNeeded()  // NotesView가 아니라 여기에서는 실행해도 LayoutConstraints 오류가 2개에서 1개로 줄어들지 않는 이유? 오류를 없앨 수 있는 방법?
+        
+        notesView.tableView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(notesView.safeAreaLayoutGuide)
+            make.bottom.equalTo(toolbar.snp.top)
+        }  // NotesView에서 레이아웃 잡은 후 NotesViewController에서 updateConstraints 하면 Updated constraint could not find existing matching constraint to update 런타임 에러
     }
     
     
@@ -447,7 +454,16 @@ extension NotesViewController: UISearchResultsUpdating {
 
 
 extension NotesViewController: UISearchControllerDelegate {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print(#function)
+////        notesView.searchController.isEditing = false
+////        notesView.searchController.setEditing(false, animated: true)
+//        notesView.searchController.searchBar.endEditing(true)
+//    }
     
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        notesView.searchController.searchBar.endEditing(true)
+//    }
 }
 
 

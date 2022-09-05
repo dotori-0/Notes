@@ -17,18 +17,8 @@ extension String {
             tintColor = UIColor.systemOrange
         }
         
-        
         let attributedString = NSMutableAttributedString(string: self)
         
-//        attributedString.addAttribute(.foregroundColor, value: tintColor, range: (self as NSString).range(of: searchText))
-//        attributedString.addAttribute(.foregroundColor, value: tintColor, range: (self as NSString).range(of: searchText.uppercased()))
-        
-//        for letter in searchText {
-//            attributedString.addAttribute(.foregroundColor, value: tintColor, range: (self as NSString).range(of: String(letter)))
-//            attributedString.addAttribute(.foregroundColor, value: tintColor, range: (self as NSString).range(of: letter.uppercased()))
-//        }
-        
-
         var rangeToSearch = self.startIndex..<self.endIndex
         while let matchingRange = self.range(of: searchText, options: .caseInsensitive, range: rangeToSearch) {
             attributedString.addAttribute(.foregroundColor, value: tintColor, range: NSRange(matchingRange, in: self))
