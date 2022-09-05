@@ -251,8 +251,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
 
-//        print("🐹 \(UIScreen.main.bounds.height)")  // 🐹 896.0
-        return 50  // 약 0.18배
+        return UIScreen.main.bounds.height * 0.06
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -313,8 +312,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
                 guard !unpinnedNotes.isEmpty else { return UITableViewCell() }
                 note = unpinnedNotes[indexPath.row]
             }
-//            guard !allNotes.isEmpty else { return UITableViewCell() }
-//            note = allNotes[indexPath.row]
             
             let titleTrimmed = note.title.trimAllWhiteSpacesAndNewlines()
             guard let contentsTrimmed = note.contents?.trimAllWhiteSpacesAndNewlines() else { return UITableViewCell() }
@@ -436,9 +433,6 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension NotesViewController: UISearchBarDelegate {
-    
-}
 
 extension NotesViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
@@ -450,20 +444,6 @@ extension NotesViewController: UISearchResultsUpdating {
         searchText = text.lowercased()
         findNotes(with: searchText)
     }
-}
-
-
-extension NotesViewController: UISearchControllerDelegate {
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print(#function)
-////        notesView.searchController.isEditing = false
-////        notesView.searchController.setEditing(false, animated: true)
-//        notesView.searchController.searchBar.endEditing(true)
-//    }
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        notesView.searchController.searchBar.endEditing(true)
-//    }
 }
 
 
