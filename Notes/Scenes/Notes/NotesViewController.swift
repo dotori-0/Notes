@@ -303,18 +303,25 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             cell.contentsLabel.text = contentsLabelText
         }
         
+        let formatter = setDateFormatter(with: note.editDate)
+        
+        cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
+
+        return cell
+    }
+    
+    private func setDateFormatter(with date: Date) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: LocalizationSettings.korea)
         let calendar = Calendar.current
         
-        let editDateComponent = calendar.dateComponents(in: .current, from: note.editDate)
+        let editDateComponent = calendar.dateComponents(in: .current, from: date)
         let weekOfEditDate = editDateComponent.weekOfYear
         
         let currentDateComponent = calendar.dateComponents(in: .current, from: Date())
         let weekOfToday = currentDateComponent.weekOfYear
         
-        if calendar.isDateInToday(note.editDate) {
-//            formatter.dateFormat = "a hh:mm"
+        if calendar.isDateInToday(date) {
             formatter.dateFormat = DateFormat.today
         } else if weekOfEditDate == weekOfToday {
             formatter.dateFormat = DateFormat.thisWeek
@@ -322,9 +329,7 @@ extension NotesViewController: UITableViewDataSource, UITableViewDelegate {
             formatter.dateFormat = DateFormat.other
         }
         
-        cell.dateAndTimeLabel.text = formatter.string(from: note.editDate)
-
-        return cell
+        return formatter
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
